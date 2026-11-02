@@ -70,7 +70,10 @@ export default function Footer() {
       </div>
       <div className="footer-bottom">
         <div className="container footer-bottom-inner">
-          <span>© {new Date().getFullYear()} DH Hospitals</span>
+          <div className="footer-attribution">
+            <span>© {new Date().getFullYear()} DH Hospitals. All Rights Reserved.</span>
+            <span>Website Maintained by Abhit Technologies</span>
+          </div>
           <span>Child Care · Eye Care · Dental Care</span>
         </div>
       </div>

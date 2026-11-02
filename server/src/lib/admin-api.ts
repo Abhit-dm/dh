@@ -139,6 +139,7 @@ function collectionFilter(request: NextRequest, resource: string) {
           date.toISOString().slice(0, 10) !== value) {
           throw new ApiError(400, 'INVALID_FILTER', 'Appointment date filter is invalid.');
         }
+        if (key === 'lte') date.setUTCHours(23, 59, 59, 999);
         dateFilter[key] = date;
       }
     }
@@ -151,10 +152,10 @@ function collectionFilter(request: NextRequest, resource: string) {
         throw new ApiError(400, 'INVALID_FILTER', 'Search text must be 100 characters or fewer.');
       }
       where.OR = [
-        { reference: { contains: search, mode: 'insensitive' } },
-        { patientName: { contains: search, mode: 'insensitive' } },
+        { reference: { contains: search } },
+        { patientName: { contains: search } },
         { phone: { contains: search } },
-        { email: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search } },
       ];
     }
     return where;

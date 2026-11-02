@@ -1715,6 +1715,16 @@ textarea:focus-visible {
   font-size: 0.73rem;
 }
 
+.footer-attribution {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-attribution span + span {
+  color: rgba(255, 255, 255, 0.76);
+}
+
 @keyframes rise-in {
   from {
     transform: translateY(14px);
@@ -2279,6 +2289,10 @@ textarea:focus-visible {
     justify-content: center;
     gap: 2px;
     padding-block: 12px;
+  }
+
+  .footer-attribution {
+    gap: 3px;
   }
 }
 

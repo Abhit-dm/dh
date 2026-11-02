@@ -1,29 +1,13 @@
 import assert from 'node:assert/strict';
-import { createServer } from 'node:net';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
-import { PGlite } from '@electric-sql/pglite';
-import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { NextRequest } from 'next/server';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { join } from 'node:path';
+import { createSqliteTestDatabase } from './sqlite-test-database';
 
 const appOrigin = 'http://localhost:3001';
 process.env.APP_ORIGIN = appOrigin;
 process.env.DATA_HASH_SECRET = 'sprint-4-test-secret-with-at-least-32-bytes';
-
-async function availablePort() {
-  const listener = createServer();
-  await new Promise<void>((resolveListen, reject) => {
-    listener.once('error', reject);
-    listener.listen(0, '127.0.0.1', resolveListen);
-  });
-  const address = listener.address();
-  if (!address || typeof address === 'string') throw new Error('No test port available.');
-  await new Promise<void>((resolveClose, reject) =>
-    listener.close((error) => (error ? reject(error) : resolveClose())),
-  );
-  return address.port;
-}
 
 function request(
   url: string,
@@ -45,42 +29,18 @@ function request(
   });
 }
 
-const database = new PGlite();
-await database.waitReady;
+const testDatabase = await createSqliteTestDatabase();
 const uploadDirectory = await mkdtemp(join(tmpdir(), 'dh-hospitals-sprint4-'));
 process.env.UPLOAD_DIR = uploadDirectory;
-const databaseServer = new PGLiteSocketServer({
-  db: database,
-  host: '127.0.0.1',
-  maxConnections: 4,
-  port: await availablePort(),
-});
 
 try {
-  await databaseServer.start();
-  process.env.DATABASE_URL =
-    `postgresql://postgres:postgres@${databaseServer.getServerConn()}/postgres`;
-
-  for (const migration of [
-    '20261031000000_initial',
-    '20261031100000_appointment-reference-consent-rate-limit',
-    '20261031120000_dashboard_gallery-category',
-  ]) {
-    await database.exec(
-      await readFile(
-        resolve('prisma', 'migrations', migration, 'migration.sql'),
-        'utf8',
-      ),
-    );
-  }
-
-  const [{ PrismaPg }, { PrismaClient, AdminRole }, security] = await Promise.all([
-    import('@prisma/adapter-pg'),
+  const [{ PrismaBetterSqlite3 }, { PrismaClient, AdminRole }, security] = await Promise.all([
+    import('@prisma/adapter-better-sqlite3'),
     import('@/generated/prisma/client'),
     import('@/lib/security'),
   ]);
   const prisma = new PrismaClient({
-    adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
+    adapter: new PrismaBetterSqlite3({ url: testDatabase.url }),
   });
 
   try {
@@ -103,6 +63,14 @@ try {
     const department = await prisma.department.create({
       data: { slug: 'sprint4-general', name: 'Sprint 4 General' },
     });
+    const appointmentDoctor = await prisma.doctor.create({
+      data: {
+        name: 'Sprint 4 Appointment Doctor',
+        qualifications: 'Verified qualification',
+        specialty: 'General care',
+        departmentId: department.id,
+      },
+    });
     const appointmentDate = new Date();
     appointmentDate.setUTCDate(appointmentDate.getUTCDate() + 5);
     const appointment = await prisma.appointment.create({
@@ -111,6 +79,7 @@ try {
         patientName: 'Sprint 4 Patient',
         phone: '9876543210',
         departmentId: department.id,
+        doctorId: appointmentDoctor.id,
         preferredDate: appointmentDate,
         preferredTime: '10:00',
         privacyConsent: true,
@@ -163,7 +132,7 @@ try {
 
     const filteredAppointments = await GET(
       request(
-        `${appOrigin}/api/admin/appointments?search=Sprint%204%20Patient&departmentId=${department.id}&dateFrom=${appointmentDate.toISOString().slice(0, 10)}&dateTo=${appointmentDate.toISOString().slice(0, 10)}`,
+        `${appOrigin}/api/admin/appointments?search=sprint%204%20patient&departmentId=${department.id}&dateFrom=${appointmentDate.toISOString().slice(0, 10)}&dateTo=${appointmentDate.toISOString().slice(0, 10)}`,
         'GET',
         undefined,
         cookie,
@@ -172,6 +141,18 @@ try {
     );
     assert.equal(filteredAppointments.status, 200);
     assert.equal((await filteredAppointments.json()).pagination.total, 1);
+    const appointmentList = await GET(
+      request(
+        `${appOrigin}/api/admin/appointments`,
+        'GET',
+        undefined,
+        cookie,
+      ),
+      { params: Promise.resolve({ path: ['appointments'] }) },
+    );
+    const listedAppointment = (await appointmentList.json()).data[0];
+    assert.equal(listedAppointment.doctorId, appointmentDoctor.id);
+    assert.equal(listedAppointment.doctor.name, appointmentDoctor.name);
 
     const editedAppointmentResponse = await PATCH(
       request(
@@ -186,6 +167,8 @@ try {
     assert.equal(editedAppointmentResponse.status, 200);
     assert.equal(editedAppointment.patientName, 'Updated Sprint Patient');
     assert.equal(editedAppointment.message, 'Updated request');
+    assert.equal(editedAppointment.doctorId, appointmentDoctor.id);
+    assert.equal(editedAppointment.doctor.name, appointmentDoctor.name);
     const confirmedResponse = await PATCH(
       request(
         `${appOrigin}/api/admin/appointments/${appointment.id}`,
@@ -196,6 +179,18 @@ try {
       { params: Promise.resolve({ path: ['appointments', appointment.id] }) },
     );
     assert.equal((await confirmedResponse.json()).data.status, 'CONFIRMED');
+    for (const status of ['CANCELLED', 'COMPLETED'] as const) {
+      const statusResponse = await PATCH(
+        request(
+          `${appOrigin}/api/admin/appointments/${appointment.id}`,
+          'PATCH',
+          { status },
+          cookie,
+        ),
+        { params: Promise.resolve({ path: ['appointments', appointment.id] }) },
+      );
+      assert.equal((await statusResponse.json()).data.status, status);
+    }
     const invalidFilter = await GET(
       request(`${appOrigin}/api/admin/appointments?dateFrom=invalid`, 'GET', undefined, cookie),
       { params: Promise.resolve({ path: ['appointments'] }) },
@@ -467,15 +462,26 @@ try {
     await deleteResource('website-settings', setting.key);
     await deleteResource('doctors', doctor.id);
     await deleteResource('departments', departmentRecord.id);
-    assert.equal(await prisma.auditLog.count(), 24);
+    const logout = await authRoutes.POST(
+      request(`${appOrigin}/api/admin/auth/logout`, 'POST', undefined, cookie),
+      { params: Promise.resolve({ action: 'logout' }) },
+    );
+    assert.equal(logout.status, 200);
+    assert.ok(logout.headers.getSetCookie().some((value) => value.includes('Max-Age=0')));
+    assert.equal(await prisma.adminSession.count({ where: { userId: admin.id } }), 0);
+    const afterLogout = await GET(
+      request(`${appOrigin}/api/admin/dashboard/summary`, 'GET', undefined, cookie),
+      { params: Promise.resolve({ path: ['dashboard', 'summary'] }) },
+    );
+    assert.equal(afterLogout.status, 401);
+    assert.equal(await prisma.auditLog.count(), 27);
     console.log(
-      'Sprint 4 admin integration passed: metrics, filters, appointment/contact updates, CRUD for departments/doctors/services/gallery/blog/settings, secure uploads, profile/password, role access, and login rate limits.',
+      'Sprint 4 admin integration passed: metrics, filters, all appointment statuses, contact updates, CRUD for departments/doctors/services/gallery/blog/settings, secure uploads, profile/password, login/logout, role access, and login rate limits.',
     );
   } finally {
     await prisma.$disconnect();
   }
 } finally {
-  await databaseServer.stop();
-  await database.close();
+  await testDatabase.cleanup();
   await rm(uploadDirectory, { recursive: true, force: true });
 }

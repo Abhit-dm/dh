@@ -23,6 +23,10 @@
 # misc
 .DS_Store
 *.pem
+*.db
+*.db-journal
+*.sqlite
+*.sqlite-journal
 
 # debug
 npm-debug.log*

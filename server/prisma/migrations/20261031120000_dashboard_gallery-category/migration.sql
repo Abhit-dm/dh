@@ -1,2 +1,0 @@
-ALTER TABLE "GalleryImage"
-ADD COLUMN "category" VARCHAR(80) NOT NULL DEFAULT 'General';

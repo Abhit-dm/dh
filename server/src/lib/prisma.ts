@@ -1,4 +1,4 @@
-import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import { PrismaClient } from '@/generated/prisma/client';
 import { ApiError } from '@/lib/http';
 
@@ -11,21 +11,31 @@ export function getPrisma(): PrismaClient {
     return globalForPrisma.dhHospitalsPrisma;
   }
 
-  const connectionString = process.env.DATABASE_URL;
-  if (!connectionString) {
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
     throw new ApiError(
       503,
       'DATABASE_NOT_CONFIGURED',
-      'The database is not configured. See the backend setup instructions.',
+      'The SQLite database is not configured. See the backend setup instructions.',
+    );
+  }
+  if (!databaseUrl.startsWith('file:')) {
+    throw new ApiError(
+      500,
+      'DATABASE_CONFIGURATION_INVALID',
+      'DATABASE_URL must use a SQLite file URL.',
     );
   }
 
-  const adapter = new PrismaPg({ connectionString });
+  const adapter = new PrismaBetterSqlite3({ url: databaseUrl });
   const client = new PrismaClient({ adapter });
-
-  if (process.env.NODE_ENV !== 'production') {
-    globalForPrisma.dhHospitalsPrisma = client;
-  }
-
+  globalForPrisma.dhHospitalsPrisma = client;
   return client;
+}
+
+export async function disconnectPrisma(): Promise<void> {
+  const client = globalForPrisma.dhHospitalsPrisma;
+  if (!client) return;
+  delete globalForPrisma.dhHospitalsPrisma;
+  await client.$disconnect();
 }

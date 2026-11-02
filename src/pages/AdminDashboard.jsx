@@ -259,7 +259,19 @@ function ResourceForm({
   const fields = resourceFields[resource];
 
   function setValue(name, value) {
-    setValues((current) => ({ ...current, [name]: value }));
+    setValues((current) => {
+      if (resource === 'appointments' && name === 'departmentId') {
+        const selectedDoctor = doctors.find((doctor) => doctor.id === current.doctorId);
+        return {
+          ...current,
+          departmentId: value,
+          ...(selectedDoctor && selectedDoctor.department.id !== value
+            ? { doctorId: '' }
+            : {}),
+        };
+      }
+      return { ...current, [name]: value };
+    });
   }
 
   async function submit(event) {

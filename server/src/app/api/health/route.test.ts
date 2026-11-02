@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { NextRequest } from 'next/server';
 import { GET } from './route';
 
-test('reports an actionable service error when PostgreSQL is not configured', async () => {
+test('reports an actionable service error when SQLite is not configured', async () => {
   const previousUrl = process.env.DATABASE_URL;
   delete process.env.DATABASE_URL;
 

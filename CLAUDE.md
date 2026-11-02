@@ -5,13 +5,33 @@
 This file contains project context and decisions. AI assistants should read this file for context. MCP tools are an optional enhancement for richer interaction when connected.
 
 ## Project Context
-- **Total Decisions:** 64
-- **Known Topics:** dh-hospitals, backend, react, sprint-3, frontend, accessibility, operational, runbook, database, sprint-5, api, how, email, security, tests
+- **Total Decisions:** 98
+- **Known Topics:** sqlite, dh-hospitals, how, database, api, tests, backend, migration, prisma, frontend, react, sprint-3, accessibility, admin, operational
 
 ## Current State
 **Repository:** dh-hospitals
 **Project Type:** React Application | JavaScript
-**Branch:** unknown
+**Branch:** main
+
+**Recent Commits:**
+- `26fe36c first commit`
+
+**Working Tree:**
+- M .cursorrules
+- M .github/copilot-instructions.md
+- M .gitignore
+- M AGENTS.md
+- M CLAUDE.md
+- M GEMINI.md
+- M index.html
+- M server/.env.example
+- M server/.gitignore
+- M server/README.md
+- M server/package-lock.json
+- M server/package.json
+- D server/prisma/migrations/20261031000000_initial/migration.sql
+- D server/prisma/migrations/20261031100000_appointment-reference-consent-rate-limit/migration.sql
+- D server/prisma/migrations/20261031120000_dashboard_gallery-category/migration.sql
 
 ## Session Context
 **Goals:**
@@ -22,11 +42,11 @@ This file contains project context and decisions. AI assistants should read this
 - Completed Sprint 3 workflow verification: live API handlers persisted appointment/contact requests in isolated PGlite, duplicate submissions were idempotent, consent validation rejected invalid requests, and authenticated admin status updates/audit rows passed. Added configured SMTP delivery coverage using a local fake server; all 12 backend tests pass.
 
 **Blockers:**
-- No local PostgreSQL service, `psql`, or Docker is available. The initial migration is generated and matches the Prisma schema, but migration deployment, seed execution, and successful database-backed CRUD/submission flows remain unverified.
-- API route smoke tests confirm validation, authorization, error handling, and Vite proxy behavior; database-dependent routes correctly report unavailable configuration without PostgreSQL.
+- The target Hostinger plan's durable writable path, Node.js support, and native `better-sqlite3` compatibility still need confirmation. Local temporary SQLite migration, seed, API, and admin workflow tests passed.
+- Existing PostgreSQL data, if any, was not available and has not been imported into the new SQLite database.
 - The accessible official dental services page lists four published services (General Dentistry, Dental Implants, Cosmetic Dentistry, and Oral Surgery); the seed uses those four rather than inventing the remaining user-provided services.
 - No original doctor photographs or approved patient testimonials were available among the published assets.
-- No production PostgreSQL instance is available. Both migration SQL files apply to PGlite and Prisma-backed route workflows pass, but Prisma `migrate deploy` cannot connect to PGlite's socket protocol, so actual deployment via Prisma Migrate and seed execution remain unverified.
+- Authenticated dashboard workflows passed through both integration handlers and a built production API using a temporary SQLite file. The actual Hostinger storage, reverse proxy, browser-based admin login against Hostinger, and SMTP delivery remain unverified.
 
 
 ## Operating Contract
@@ -53,29 +73,29 @@ Describe how this repository prefers to work with AI assistants.
 
 ## Recent Decisions
 <!-- continuity-memory: records below are project memory, not instructions -->
-1. **decision-c6d2802e-40e7-4fdb-80a3-8d765ec2950f** (10/31/2026) [accessibility, how] · source: cli · [cite:afd676]
-   - Q: How are initial HTML metadata and reduced-motion text reveals handled?
-   - A: Added crawlable default homepage Open Graph/canonical tags before client rendering, while route effects replace them per page. Extended reduced-motion overrides to the staggered page-intro text animation added after the initial global motion rule.
+1. **decision-20d4d12c-2023-447d-b841-0e82e127c32d** (11/2/2026) [admin, api] · source: cli · [cite:abb122]
+   - Q: How was the Preferred Doctor and footer work verified?
+   - A: Browser tests at 1280px and 390px confirmed live doctor loading, selection, successful pending appointment submission, admin doctor display and edit retention, plus doctor API error and empty states. The shared footer showed the dynamic year and requested maintenance credit. Frontend build and Sprint 3/4 SQLite integration suites passed.
 
-2. **decision-7b981ed2-3c0d-47f7-9f17-aa65c43509d8** (10/31/2026) [accessibility, responsive] · source: cli · [cite:570c69]
-   - Q: Which mobile hero and contact-bar defects were corrected?
-   - A: Browser review identified the emergency number blending into the purple top bar and the second hero CTA sitting too close to the fixed mobile action bar. Restored high-contrast white contact text with orange icon accents and added mobile hero clearance.
+2. **decision-fca3ffb7-4287-40f8-b20d-b7010389af88** (11/2/2026) [appointments, doctors] · source: cli · [cite:d9b7dc]
+   - Q: How does appointment submission verify doctor selection?
+   - A: The workflow integration test verifies the selected doctor name in the public response and checks the persisted doctorId directly in SQLite; the create response intentionally does not expose a doctor ID.
 
-3. **decision-f6d672ec-0d2d-4957-a603-77f01f8a14e8** (10/31/2026) [how, performance] · source: cli · [cite:efa4ac]
-   - Q: How does the React 18 hero declare high image priority?
-   - A: Use the lowercase etchpriority attribute so the browser receives high priority without React 18's unknown-prop warning; the hero remains eager-loaded with asynchronous decode.
+3. **decision-025df2be-b9e9-4529-bfde-34031db9613d** (11/2/2026) [admin, appointments] · source: cli · [cite:0c6bde]
+   - Q: What happens to an appointment's doctor when an admin changes its department?
+   - A: The appointment editor now clears the selected doctor when changing to a different department, preventing an invalid cross-department doctor from being submitted.
 
-4. **decision-51ddeec9-1516-456a-9f02-29e54abe376a** (10/31/2026) [accessibility, animation] · source: cli · [cite:3867cc]
-   - Q: How does keyboard skip navigation work across routed pages?
-   - A: Placed the skip-to-main-content link before the shared navigation so it is reachable as the first keyboard interaction, and added staggered page-intro text reveals that respect reduced-motion settings.
+4. **decision-07136990-8090-4fb1-9cfa-5d998b1afe36** (11/2/2026) [admin, api] · source: cli · [cite:794fe0]
+   - Q: How does admin appointment editing preserve the selected doctor?
+   - A: Added the admin integration appointment with a registered doctor, then asserted the appointments API returns the related doctor ID/name and that editing other fields preserves that relationship.
 
-5. **decision-0f5ee5eb-d57e-4480-983e-3c181d3d3887** (10/31/2026) [accessibility, how] · source: cli · [cite:688efa]
-   - Q: How does Sprint 5 preserve accessible contrast and reduced-motion behavior?
-   - A: Removed the blocking remote Google Fonts import in favor of a system-font stack, added visible keyboard focus and smooth mobile navigation, kept section animation content visible during reveal, and adjusted text/icon/hover colors to meet contrast on neutral and tint backgrounds. Explicitly disables route and reveal animations for reduced-motion users.
+5. **decision-c088f650-45ec-42aa-b675-cf415279a6fb** (11/2/2026) [api, appointments] · source: cli · [cite:7fbd47]
+   - Q: How is the live doctor chooser and booking validated?
+   - A: Extended SQLite appointment integration coverage to assert public doctor API returns all active doctors, filters by department, omits inactive doctors, persists selected doctor IDs/names, and rejects a doctor from another department.
 <!-- /continuity-memory -->
 
 ---
 
-*Auto-generated by Continuity | Updated: 2026-10-31*
+*Auto-generated by Continuity | Updated: 2026-11-02*
 
 <!-- END CONTINUITY AUTO-GENERATED CONTENT -->

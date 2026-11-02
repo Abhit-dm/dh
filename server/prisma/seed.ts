@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import { PrismaClient, AdminRole } from '../src/generated/prisma/client';
 import { hashPassword } from '../src/lib/security';
 import { adminLoginSchema } from '../src/lib/validation';
@@ -10,7 +10,7 @@ function requiredEnvironmentValue(name: string) {
   return value;
 }
 
-const connectionString = requiredEnvironmentValue('DATABASE_URL');
+const databaseUrl = requiredEnvironmentValue('DATABASE_URL');
 const adminEmailResult = adminLoginSchema.shape.email.safeParse(
   requiredEnvironmentValue('ADMIN_BOOTSTRAP_EMAIL'),
 );
@@ -27,7 +27,7 @@ if (Buffer.byteLength(requiredEnvironmentValue('DATA_HASH_SECRET')) < 32) {
 }
 
 const prisma = new PrismaClient({
-  adapter: new PrismaPg({ connectionString }),
+  adapter: new PrismaBetterSqlite3({ url: databaseUrl }),
 });
 
 const departments = [

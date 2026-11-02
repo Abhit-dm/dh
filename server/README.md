@@ -1,25 +1,31 @@
 # DH Hospitals API
 
 The public website remains a Vite application. This directory contains a
-separate Next.js API service and owns all PostgreSQL access and secrets. During
+separate Next.js API service and owns the SQLite file and all secrets. During
 development, Vite proxies `/api` requests to the API service.
 
 ## Requirements
 
 - Node.js 20.19+.
-- PostgreSQL 14 or newer.
+- A Node.js host with persistent writable storage.
+- SQLite is bundled through Prisma's `better-sqlite3` adapter; no separate
+  database server is needed.
 
-## Configure PostgreSQL
+## Configure SQLite
 
-Create a PostgreSQL database and user, then copy `server/.env.example` to
-`server/.env` and replace every example value:
+Copy `server/.env.example` to `server/.env` and replace the example values:
 
 ```powershell
 Copy-Item server\.env.example server\.env
 ```
 
-Set `DATABASE_URL` to the private PostgreSQL connection string. Generate a
-separate random value for `DATA_HASH_SECRET`:
+For local development, `DATABASE_URL` uses
+`file:./prisma/dh-hospitals.db`. The API process must be able to write that file.
+In production, use an absolute SQLite file URL in persistent storage outside
+the public web root, and create its parent directory before deployment. Do not
+point the web server at a publicly served or ephemeral directory.
+
+Generate a separate random value for `DATA_HASH_SECRET`:
 
 ```powershell
 node -e "console.log(require('node:crypto').randomBytes(32).toString('base64url'))"
@@ -66,6 +72,10 @@ dental page, verified eye service summaries, existing hospital image assets,
 and published contact settings. No sample blog posts or testimonials are
 invented.
 
+The original migrations were PostgreSQL-specific and have been replaced by a
+fresh SQLite baseline. Existing records from any PostgreSQL database are not
+imported automatically; export and migrate them separately if they exist.
+
 ## Run the frontend and API
 
 Open two terminals from the repository root:
@@ -78,8 +88,9 @@ npm run dev
 In production, route `/api/*` to this Next.js service through a same-origin
 reverse proxy and set `APP_ORIGIN` to the real frontend origin. The proxy must
 overwrite client-supplied `X-Real-IP` and `X-Forwarded-For` headers with the
-verified client IP; admin login throttling uses these headers. Never expose
-PostgreSQL to browsers.
+verified client IP; admin login throttling uses these headers. Never serve the
+SQLite file publicly. Set `NODE_ENV=production`, terminate TLS at the
+hosting edge, and configure HSTS there.
 
 ## API overview
 
@@ -122,11 +133,16 @@ npm --prefix server run build
 ```
 
 The API tests cover validation, authentication boundaries, pagination, and
-unavailable-database behavior. The integration workflow applies the checked-in
-migration SQL to an isolated PGlite database and exercises public submissions
-and admin status changes. It does not replace verifying `db:deploy` against a
-reachable PostgreSQL instance before deployment.
+unavailable-database behavior. The integration workflows create temporary
+SQLite databases, apply the checked-in migration through Prisma Migrate, and
+exercise appointment/contact submissions and admin operations against the same
+database provider used at runtime.
 The Sprint 4 integration test exercises dashboard metrics and filters,
 appointment/contact updates, CRUD permissions and operations, image uploads,
-profile/password changes, and login rate limits against an isolated PGlite
+profile/password changes, and login rate limits against an isolated SQLite
 database.
+
+SQLite is intended for one API instance using persistent local storage. Do not
+run multiple API instances against a shared SQLite file. Confirm that the
+Hostinger plan supports a persistent writable database path and a long-running
+Node.js API process before deploying.

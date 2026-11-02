@@ -65,29 +65,34 @@ export default function AppointmentForm({ initialDepartment = '' }) {
   const today = todayInIndia();
 
   useEffect(() => {
-    if (!form.department) {
-      setDoctors([]);
-      setDoctorLoadError('');
-      setIsLoadingDoctors(false);
-      return undefined;
-    }
-
     const controller = new AbortController();
     setDoctors([]);
     setDoctorLoadError('');
     setIsLoadingDoctors(true);
-    fetch(`/api/public/doctors?department=${encodeURIComponent(form.department)}`, {
-      signal: controller.signal,
-    })
+    const departmentFilter = form.department
+      ? `?department=${encodeURIComponent(form.department)}`
+      : '';
+    fetch(`/api/public/doctors${departmentFilter}`, { signal: controller.signal })
       .then(async (response) => {
         const result = await response.json();
-        if (!response.ok) throw new Error(result.error?.message || 'Doctor list is unavailable.');
+        if (!response.ok) {
+          throw new Error(result.error?.message || 'Doctor list is unavailable.');
+        }
         return result;
       })
-      .then((result) => setDoctors(result.data))
+      .then((result) => {
+        if (!Array.isArray(result.data)) {
+          throw new Error('The doctor list could not be read. Please try again later.');
+        }
+        setDoctors(result.data);
+      })
       .catch((error) => {
         if (error.name !== 'AbortError') {
-          setDoctorLoadError('Doctor choices are unavailable right now. You can continue without selecting one.');
+          setDoctorLoadError(
+            error instanceof Error
+              ? `Preferred doctors could not be loaded: ${error.message}`
+              : 'Preferred doctors could not be loaded. Please try again later.',
+          );
         }
       })
       .finally(() => {
@@ -124,6 +129,15 @@ export default function AppointmentForm({ initialDepartment = '' }) {
       nextErrors.email = 'Enter a valid email address.';
     }
     if (!form.department) nextErrors.department = 'Select a department.';
+    if (
+      form.doctorId &&
+      !doctors.some((doctor) =>
+        doctor.id === form.doctorId &&
+        (!form.department || doctor.department?.slug === form.department),
+      )
+    ) {
+      nextErrors.doctorId = 'Select an available doctor for the selected department.';
+    }
     if (!form.date) {
       nextErrors.date = 'Choose a preferred appointment date.';
     } else if (form.date < today) {
@@ -318,21 +332,37 @@ export default function AppointmentForm({ initialDepartment = '' }) {
           {errors.time && <small id="error-time">{errors.time}</small>}
         </label>
         <label className="form-field">
-          <span>Preferred doctor</span>
+          <span>Preferred Doctor</span>
           <select
             name="doctorId"
             value={form.doctorId}
             onChange={updateField}
-            disabled={!form.department || isLoadingDoctors || doctors.length === 0}
+            disabled={isLoadingDoctors || doctors.length === 0}
+            aria-invalid={Boolean(errors.doctorId)}
+            aria-describedby={
+              errors.doctorId ? 'error-doctorId' : doctorLoadError ? 'error-doctor-load' : undefined
+            }
           >
-            <option value="">{isLoadingDoctors ? 'Loading doctors…' : 'No preference'}</option>
+            <option value="">
+              {isLoadingDoctors
+                ? 'Loading doctors…'
+                : doctors.length
+                  ? 'Select Preferred Doctor'
+                  : doctorLoadError
+                    ? 'Select Preferred Doctor'
+                    : 'No doctors available'}
+            </option>
             {doctors.map((doctor) => (
               <option value={doctor.id} key={doctor.id}>
                 {doctor.name}
               </option>
             ))}
           </select>
-          {doctorLoadError && <small>{doctorLoadError}</small>}
+          {errors.doctorId && <small id="error-doctorId">{errors.doctorId}</small>}
+          {doctorLoadError && <small id="error-doctor-load" role="status">{doctorLoadError}</small>}
+          {!isLoadingDoctors && !doctorLoadError && !doctors.length && (
+            <small>No active doctors are available right now.</small>
+          )}
         </label>
         <label className="form-field form-field-wide">
           <span>Additional message</span>

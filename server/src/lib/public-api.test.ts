@@ -12,7 +12,7 @@ test('creates a compact, date-scoped public appointment reference', () => {
   assert.notEqual(first, second);
 });
 
-test('rejects appointment honeypot submissions without touching PostgreSQL', async () => {
+test('rejects appointment honeypot submissions without touching SQLite', async () => {
   const request = new NextRequest('http://localhost:3001/api/public/appointments', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -35,7 +35,7 @@ test('rejects appointment honeypot submissions without touching PostgreSQL', asy
   assert.equal(result.error.code, 'SPAM_DETECTED');
 });
 
-test('rejects contact honeypot submissions without touching PostgreSQL', async () => {
+test('rejects contact honeypot submissions without touching SQLite', async () => {
   const request = new NextRequest('http://localhost:3001/api/public/contact-messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
