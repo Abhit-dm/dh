@@ -1,11 +1,26 @@
 import { ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export default function ServiceCard({ title, description, image, to }) {
+export default function ServiceCard({
+  title,
+  description,
+  image,
+  imageAlt = '',
+  imageWidth,
+  imageHeight,
+  to,
+}) {
   return (
     <article className="service-card">
       <Link to={to} className="service-image-link" aria-label={`Explore ${title}`}>
-        <img src={image} alt="" loading="lazy" decoding="async" />
+        <img
+          src={image}
+          alt={imageAlt}
+          width={imageWidth}
+          height={imageHeight}
+          loading="lazy"
+          decoding="async"
+        />
         <span className="service-image-arrow">
           <ArrowUpRight size={19} aria-hidden="true" />
         </span>

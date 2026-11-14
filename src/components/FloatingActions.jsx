@@ -4,7 +4,6 @@ import useHospitalSettings from '../hooks/useHospitalSettings.jsx';
 
 export default function FloatingActions() {
   const { contact } = useHospitalSettings();
-  const emergencyNumber = contact.emergency.replace(/[^\d+]/g, '');
 
   return (
     <aside className="floating-actions" aria-label="Quick contact actions">
@@ -14,7 +13,7 @@ export default function FloatingActions() {
       </a>
       <a
         className="floating-action floating-emergency"
-        href={`tel:${emergencyNumber}`}
+        href={`tel:${contact.phoneLink}`}
       >
         <Siren size={17} aria-hidden="true" />
         <span>Emergency</span>

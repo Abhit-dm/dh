@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, CheckCircle2 } from 'lucide-react';
 import usePublicDepartments from '../hooks/usePublicDepartments.js';
+import { getSpecializationSlug } from '../data/specializations.js';
+import { formatDoctorName } from '../data/hospital.js';
+import { readApiResponse } from '../lib/readApiResponse.js';
 
 const initialForm = {
   patientName: '',
@@ -52,7 +55,7 @@ export default function AppointmentForm({ initialDepartment = '' }) {
   const { departments, error: departmentLoadError } = usePublicDepartments();
   const [form, setForm] = useState(() => ({
     ...initialForm,
-    department: initialDepartment.toLowerCase().replace(/\s+/g, '-'),
+    department: getSpecializationSlug(initialDepartment),
   }));
   const [errors, setErrors] = useState({});
   const [submission, setSubmission] = useState(null);
@@ -61,6 +64,7 @@ export default function AppointmentForm({ initialDepartment = '' }) {
   const [doctors, setDoctors] = useState([]);
   const [doctorLoadError, setDoctorLoadError] = useState('');
   const [isLoadingDoctors, setIsLoadingDoctors] = useState(false);
+  const [doctorLoadAttempt, setDoctorLoadAttempt] = useState(0);
   const submissionInProgress = useRef(false);
   const today = todayInIndia();
 
@@ -73,13 +77,7 @@ export default function AppointmentForm({ initialDepartment = '' }) {
       ? `?department=${encodeURIComponent(form.department)}`
       : '';
     fetch(`/api/public/doctors${departmentFilter}`, { signal: controller.signal })
-      .then(async (response) => {
-        const result = await response.json();
-        if (!response.ok) {
-          throw new Error(result.error?.message || 'Doctor list is unavailable.');
-        }
-        return result;
-      })
+      .then((response) => readApiResponse(response, 'Preferred doctors'))
       .then((result) => {
         if (!Array.isArray(result.data)) {
           throw new Error('The doctor list could not be read. Please try again later.');
@@ -100,7 +98,7 @@ export default function AppointmentForm({ initialDepartment = '' }) {
       });
 
     return () => controller.abort();
-  }, [form.department]);
+  }, [form.department, doctorLoadAttempt]);
 
   function updateField(event) {
     const { name, value, type, checked } = event.target;
@@ -331,9 +329,10 @@ export default function AppointmentForm({ initialDepartment = '' }) {
           />
           {errors.time && <small id="error-time">{errors.time}</small>}
         </label>
-        <label className="form-field">
-          <span>Preferred Doctor</span>
+        <div className="form-field">
+          <span id="appointment-doctor-label">Preferred Doctor</span>
           <select
+            aria-labelledby="appointment-doctor-label"
             name="doctorId"
             value={form.doctorId}
             onChange={updateField}
@@ -346,24 +345,34 @@ export default function AppointmentForm({ initialDepartment = '' }) {
             <option value="">
               {isLoadingDoctors
                 ? 'Loading doctors…'
-                : doctors.length
-                  ? 'Select Preferred Doctor'
-                  : doctorLoadError
+                : doctorLoadError
+                  ? 'Doctors unavailable'
+                  : doctors.length
                     ? 'Select Preferred Doctor'
                     : 'No doctors available'}
             </option>
             {doctors.map((doctor) => (
               <option value={doctor.id} key={doctor.id}>
-                {doctor.name}
+                {formatDoctorName(doctor.name)}
               </option>
             ))}
           </select>
           {errors.doctorId && <small id="error-doctorId">{errors.doctorId}</small>}
           {doctorLoadError && <small id="error-doctor-load" role="status">{doctorLoadError}</small>}
+          {doctorLoadError && (
+            <button
+              className="text-link doctor-retry-button"
+              type="button"
+              onClick={() => setDoctorLoadAttempt((attempt) => attempt + 1)}
+              disabled={isLoadingDoctors}
+            >
+              {isLoadingDoctors ? 'Retrying…' : 'Retry loading doctors'}
+            </button>
+          )}
           {!isLoadingDoctors && !doctorLoadError && !doctors.length && (
             <small>No active doctors are available right now.</small>
           )}
-        </label>
+        </div>
         <label className="form-field form-field-wide">
           <span>Additional message</span>
           <textarea

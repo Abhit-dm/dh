@@ -1,11 +1,8 @@
 export const contact = {
   address:
-    'DH hospitals Road, Behind Chepalakundi, Penamaluru Center, Poranki, Vijayawada - 521137',
-  phone: '+91 866 258 1123',
-  phoneLink: '+918662581123',
-  landline: '0866-2581123',
-  emergency: '+91 9908533667',
-  email: 'contact@dhhospitals.com',
+    'DH Hospitals Road, Behind Chepalakundi, Penamaluru Center, Poranki, Vijayawada - 521137',
+  phone: '8886234108',
+  email: 'dhreception1@gmail.com',
   hours: [
     { days: 'Monday - Saturday', time: '09:00 - 08:00' },
     { days: 'Sunday', time: '09:00 - 01:00' },
@@ -33,7 +30,7 @@ export const doctors = [
     image: null,
   },
   {
-    name: 'DR.DR.SAI HARSHITHA SUNKAVALLY',
+    name: 'DR. SAI HARSHITHA SUNKAVALLY',
     qualifications: 'BDS - Dental Surgeon.',
     specialty: 'Dental Surgeon.',
     department: 'Dental Care',
@@ -41,24 +38,42 @@ export const doctors = [
   },
 ];
 
+export function formatDoctorName(name) {
+  return name.replace(/^(?:DR\.\s*)+/i, 'DR. ').trim();
+}
+
+export function getDoctorDepartmentName(doctor) {
+  const department = doctor.department;
+  if (typeof department === 'string') return department;
+  if (department?.slug === 'dental-care') return 'Dental Care';
+  return department?.name || '';
+}
+
+export const CHILD_CARE_MAIN_IMAGE = '/images/child-care-main.png';
+
 export const childServices = [
   {
     title: 'Comprehensive Pediatric Care',
     description:
       'Medical care for newborns, infants, and adolescents up to 18 years old.',
-    image: '/images/index-about.webp',
+    image: CHILD_CARE_MAIN_IMAGE,
+    imageAlt: 'A pediatrician examining a young child during a consultation.',
+    imageWidth: 1536,
+    imageHeight: 1024,
   },
   {
     title: 'Child Health Support',
     description:
       'Care for skin problems, nebulization, and diet feeding counseling.',
-    image: '/images/hospital-cover.webp',
+    image: '/images/child-health-support.jpg',
+    imageAlt: 'A clinician measuring a child’s growth during a pediatric checkup.',
   },
   {
     title: 'Emergency Pediatric Care Support',
     description:
       "Prompt medical care support and guidance for your child's health needs.",
-    image: '/images/index-about-2.webp',
+    image: '/images/pediatric-emergency-care.jpg',
+    imageAlt: 'Pediatric emergency-response training using a child-sized mannequin.',
   },
 ];
 
@@ -66,32 +81,35 @@ export const eyeServices = [
   {
     title: 'Vision Screening',
     description:
-      'Ensure early detection of vision problems with comprehensive screening services at DH Eye Hospital.',
+      'Ensure early detection of vision problems with comprehensive screening services at DH Hospitals.',
     image: '/images/vision-screening.webp',
   },
   {
     title: 'Cataract Surgery',
     description:
-      'Experience advanced cataract surgery procedures with state-of-the-art technology at DH Eye Hospital.',
+      'Experience advanced cataract surgery procedures with state-of-the-art technology at DH Hospitals.',
     image: '/images/cataract-services.webp',
   },
   {
     title: 'LASIK Surgery',
     description:
       'DH Hospitals offer LASIK surgery to correct common vision problems and reduce dependence on glasses or contacts.',
-    image: '/images/lasik-surgery.webp',
+    image: '/images/lasik-surgery-content.jpg',
+    imageAlt: 'Eye surgery performed using a precision surgical instrument.',
   },
   {
     title: 'Glaucoma & Optic Nerve Care',
     description:
-      'DH Hospital specializes in glaucoma surgery and optic nerve treatments.',
-    image: '/images/index-about-2.webp',
+      'DH Hospitals lists glaucoma and optic nerve care information.',
+    image: '/images/glaucoma-tonometry.jpg',
+    imageAlt: 'A clinician measuring a patient’s eye pressure during an eye exam.',
   },
   {
     title: 'Laser Procedures',
     description:
       'Laser procedures are among the eye-care services listed by DH Hospitals.',
-    image: '/images/index-about.webp',
+    image: '/images/laser-procedures.jpg',
+    imageAlt: 'An ophthalmic laser procedure being performed by a surgeon.',
   },
   {
     title: 'Optics & Contact Lenses',
@@ -112,7 +130,8 @@ export const dentalServices = [
     title: 'Orthodontic Treatment',
     description:
       'Expert braces and aligner treatments for perfect smiles and improved dental alignment in children and adults.',
-    image: '/images/cosmetic-dentistry.webp',
+    image: '/images/orthodontic-treatment.jpg',
+    imageAlt: 'Dental braces used to align teeth.',
   },
   {
     title: 'Root Canal Therapy',
@@ -164,7 +183,7 @@ export const galleryImages = [
   },
   {
     src: '/images/vision-screening.webp',
-    alt: 'Vision screening service at DH Eye Hospital',
+    alt: 'Vision screening service at DH Hospitals',
     caption: 'Vision screening',
   },
   {

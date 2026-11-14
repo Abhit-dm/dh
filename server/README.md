@@ -31,8 +31,10 @@ Generate a separate random value for `DATA_HASH_SECRET`:
 node -e "console.log(require('node:crypto').randomBytes(32).toString('base64url'))"
 ```
 
-`APP_ORIGIN` must exactly match the browser origin serving the frontend. For
-local development that is `http://localhost:5173`. Set a unique
+`APP_ORIGIN` must exactly match the browser origin serving the frontend. The
+default local Vite origin is `http://localhost:5173`; if Vite selects another
+port because 5173 is occupied (for example, `5174`), update `APP_ORIGIN` to
+that exact origin and restart the API. Set a unique
 `ADMIN_BOOTSTRAP_PASSWORD` of at least 16 characters. Keep `.env` out of source
 control and never put database or bootstrap credentials in a `VITE_*` variable.
 

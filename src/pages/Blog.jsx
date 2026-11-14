@@ -21,7 +21,7 @@ const careGuides = [
     description:
       'Learn about the vision screening, cataract surgery, and LASIK services listed by DH Hospitals.',
     image: '/images/vision-screening.webp',
-    alt: 'Vision screening service at DH Eye Hospital',
+    alt: 'Vision screening service at DH Hospitals',
     to: '/eye-care',
     link: 'Explore Eye Care',
   },

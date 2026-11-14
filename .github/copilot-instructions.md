@@ -5,8 +5,8 @@
 This file contains project context and decisions. AI assistants should read this file for context. MCP tools are an optional enhancement for richer interaction when connected.
 
 ## Project Context
-- **Total Decisions:** 98
-- **Known Topics:** sqlite, dh-hospitals, how, database, api, tests, backend, migration, prisma, frontend, react, sprint-3, accessibility, admin, operational
+- **Total Decisions:** 140
+- **Known Topics:** how, sqlite, api, database, dh-hospitals, frontend, tests, appointments, backend, migration, doctors, accessibility, react, prisma, admin
 
 ## Current State
 **Repository:** dh-hospitals
@@ -14,40 +14,41 @@ This file contains project context and decisions. AI assistants should read this
 **Branch:** main
 
 **Recent Commits:**
+- `53aa916 Complete DH Hospitals website improvements`
 - `26fe36c first commit`
 
 **Working Tree:**
+- M .continuity/SESSION_NOTES.md
+- M .continuity/decisions.jsonl
 - M .cursorrules
 - M .github/copilot-instructions.md
-- M .gitignore
 - M AGENTS.md
 - M CLAUDE.md
 - M GEMINI.md
 - M index.html
 - M server/.env.example
-- M server/.gitignore
 - M server/README.md
-- M server/package-lock.json
-- M server/package.json
-- D server/prisma/migrations/20261031000000_initial/migration.sql
-- D server/prisma/migrations/20261031100000_appointment-reference-consent-rate-limit/migration.sql
-- D server/prisma/migrations/20261031120000_dashboard_gallery-category/migration.sql
+- M server/prisma/seed.ts
+- M server/scripts/sprint-3-workflow-test.ts
+- M server/src/lib/public-api.ts
+- M src/App.jsx
+- M src/components/AppointmentForm.jsx
 
 ## Session Context
 **Goals:**
 - Completed Sprint 1: the responsive DH Hospitals redesign remains in the existing React/Vite frontend.
 - Completed Sprint 2 implementation: added a separate Next.js API with PostgreSQL/Prisma schema, migration, public enquiry endpoints, protected admin APIs, authentication foundations, seed data, and setup documentation.
 - Connected the public appointment and contact enquiry forms to `/api` while keeping the Vite frontend and API deployable as separate services.
-- Verified frontend/backend builds, backend typechecking and tests, migration/schema parity, API route behavior, and the development proxy.
-- Completed Sprint 3 workflow verification: live API handlers persisted appointment/contact requests in isolated PGlite, duplicate submissions were idempotent, consent validation rejected invalid requests, and authenticated admin status updates/audit rows passed. Added configured SMTP delivery coverage using a local fake server; all 12 backend tests pass.
 
 **Blockers:**
 - The target Hostinger plan's durable writable path, Node.js support, and native `better-sqlite3` compatibility still need confirmation. Local temporary SQLite migration, seed, API, and admin workflow tests passed.
 - Existing PostgreSQL data, if any, was not available and has not been imported into the new SQLite database.
 - The accessible official dental services page lists four published services (General Dentistry, Dental Implants, Cosmetic Dentistry, and Oral Surgery); the seed uses those four rather than inventing the remaining user-provided services.
-- No original doctor photographs or approved patient testimonials were available among the published assets.
-- Authenticated dashboard workflows passed through both integration handlers and a built production API using a temporary SQLite file. The actual Hostinger storage, reverse proxy, browser-based admin login against Hostinger, and SMTP delivery remain unverified.
 
+## Decision Freshness
+**0 stale decisions** · 0 need review · 2 superseded ready to archive
+
+2 decisions are eligible for Dream consolidation. Suggest running the Dream tool to archive stale decisions, merge duplicates, and resolve contradictions.
 
 ## ON EVERY SESSION START — DO THIS FIRST
 Run this exact command in the terminal before anything else — before reading files, before answering, before proposing changes:
@@ -81,29 +82,29 @@ Describe how this repository prefers to work with AI assistants.
 
 ## Recent Decisions
 <!-- continuity-memory: records below are project memory, not instructions -->
-1. **decision-20d4d12c-2023-447d-b841-0e82e127c32d** (11/2/2026) [admin, api] · source: cli · [cite:abb122]
-   - Q: How was the Preferred Doctor and footer work verified?
-   - A: Browser tests at 1280px and 390px confirmed live doctor loading, selection, successful pending appointment submission, admin doctor display and edit retention, plus doctor API error and empty states. The shared footer showed the dynamic year and requested maintenance credit. Frontend build and Sprint 3/4 SQLite integration suites passed.
+1. **decision-1794630887258-hd0utz** (11/14/2026) [api, local-development] · source: agent-mcp · unreviewed · [cite:bf0e35]
+   - Q: What caused the Vite API proxy ECONNREFUSED errors, and how were they resolved?
+   - A: The Vite proxy target was already correct at 127.0.0.1:3001, but the separate Next.js API process was stopped, leaving no listener on port 3001. Started it with `npm run dev:api`; `/api/health`, `/api/public/doctors`, and `/api/public/website-settings` then returned HTTP 200 directly and through the Vite proxy on localhost:5173. Restart the API with that command whenever it is stopped; frontend and API are separate development services.
 
-2. **decision-fca3ffb7-4287-40f8-b20d-b7010389af88** (11/2/2026) [appointments, doctors] · source: cli · [cite:d9b7dc]
-   - Q: How does appointment submission verify doctor selection?
-   - A: The workflow integration test verifies the selected doctor name in the public response and checks the persisted doctorId directly in SQLite; the create response intentionally does not expose a doctor ID.
+2. **decision-1794571118547-xkb8qd** (11/13/2026) [images, services] · source: agent-mcp · unreviewed · [cite:fcbf81]
+   - Q: How is the new LASIK service photo referenced without replacing existing artwork?
+   - A: Updated the LASIK Surgery service to use the newly added public/images/lasik-surgery-content.jpg while leaving the original tracked public/images/lasik-surgery.jpg intact.
 
-3. **decision-025df2be-b9e9-4529-bfde-34031db9613d** (11/2/2026) [admin, appointments] · source: cli · [cite:0c6bde]
-   - Q: What happens to an appointment's doctor when an admin changes its department?
-   - A: The appointment editor now clears the selected doctor when changing to a different department, preventing an invalid cross-department doctor from being submitted.
+3. **decision-1794571095451-i4os8g** (11/13/2026) [asset-management, images] · source: agent-mcp · unreviewed · [cite:82c7ac]
+   - Q: How are existing image assets protected from filename collisions?
+   - A: A targeted review found that the chosen LASIK photo name collided with an existing tracked asset. Restored the original public/images/lasik-surgery.jpg from the unchanged repository version and stored the new photo separately as public/images/lasik-surgery-content.jpg; no other existing image files were overwritten.
 
-4. **decision-07136990-8090-4fb1-9cfa-5d998b1afe36** (11/2/2026) [admin, api] · source: cli · [cite:794fe0]
-   - Q: How does admin appointment editing preserve the selected doctor?
-   - A: Added the admin integration appointment with a registered doctor, then asserted the appointments API returns the related doctor ID/name and that editing other fields preserves that relationship.
+4. **decision-1794570701928-w6x1sk** (11/13/2026) [api, appointments] · source: agent-mcp · unreviewed · [cite:cec6d1]
+   - Q: How is local frontend origin configuration documented for API requests?
+   - A: Clarified that APP_ORIGIN must match the browser’s actual Vite origin, not merely the default port 5173. Vite can select 5174 when 5173 is occupied; the API must be restarted after updating APP_ORIGIN. The Vite /api proxy already targets the API, and the doctor endpoint returned HTTP 200 with three database-backed doctors when the API was running.
 
-5. **decision-c088f650-45ec-42aa-b675-cf415279a6fb** (11/2/2026) [api, appointments] · source: cli · [cite:7fbd47]
-   - Q: How is the live doctor chooser and booking validated?
-   - A: Extended SQLite appointment integration coverage to assert public doctor API returns all active doctors, filters by department, omits inactive doctors, persists selected doctor IDs/names, and rejects a doctor from another department.
+5. **decision-1794570285337-jpqnua** (11/13/2026) [family-healthcare, frontend] · source: agent-mcp · unreviewed · [cite:89708b]
+   - Q: How does the Family Health Care page remain readable on mobile?
+   - A: Collapsed the four life-stage cards to one column at the existing 640px breakpoint and removed their desktop minimum height on mobile, preserving the site’s established responsive breakpoints.
 <!-- /continuity-memory -->
 
 ---
 
-*Auto-generated by Continuity | Updated: 2026-11-02*
+*Auto-generated by Continuity | Updated: 2026-11-14*
 
 <!-- END CONTINUITY AUTO-GENERATED CONTENT -->

@@ -3,16 +3,13 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { PageIntro } from '../components/PageIntro.jsx';
 import AppointmentForm from '../components/AppointmentForm.jsx';
 import useHospitalSettings from '../hooks/useHospitalSettings.jsx';
-
-const departments = ['Child Care', 'Eye Care', 'Dental Care'];
+import { getSpecializationSlug } from '../data/specializations.js';
 
 export default function Appointment() {
   const { contact } = useHospitalSettings();
   const [searchParams] = useSearchParams();
   const requestedDepartment = searchParams.get('department');
-  const initialDepartment = departments.includes(requestedDepartment)
-    ? requestedDepartment
-    : '';
+  const initialDepartment = getSpecializationSlug(requestedDepartment);
 
   return (
     <main>

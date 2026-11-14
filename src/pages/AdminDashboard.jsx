@@ -34,6 +34,7 @@ import {
 } from 'lucide-react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { adminRequest } from '../lib/adminApi.js';
+import { formatDoctorName } from '../data/hospital.js';
 
 const pageSize = 20;
 
@@ -117,7 +118,7 @@ const resourceFields = {
   doctors: [
     { name: 'name', label: 'Doctor name', required: true },
     { name: 'qualifications', label: 'Qualifications', required: true },
-    { name: 'specialty', label: 'Specialization', required: true },
+    { name: 'specialty', label: 'Designation', required: true },
     { name: 'bio', label: 'Biography', type: 'textarea' },
     { name: 'departmentId', label: 'Department', type: 'department', required: true },
     { name: 'imageUrl', label: 'Doctor image', type: 'image', imageResource: 'doctors' },
@@ -343,12 +344,12 @@ function ResourceForm({
                     ) : field.type === 'department' ? (
                       <select required={field.required} value={values[field.name] ?? ''} onChange={(event) => setValue(field.name, event.target.value)}>
                         <option value="">Select department</option>
-                        {departments.map((department) => <option key={department.id} value={department.id}>{department.name}</option>)}
+                        {departments.map((department) => <option key={department.id} value={department.id}>{resource === 'doctors' && department.slug === 'dental-care' ? 'Dental Care' : department.name}</option>)}
                       </select>
                     ) : field.type === 'doctor' ? (
                       <select value={values[field.name] ?? ''} onChange={(event) => setValue(field.name, event.target.value)}>
                         <option value="">No doctor preference</option>
-                        {doctors.filter((doctor) => !values.departmentId || doctor.department.id === values.departmentId).map((doctor) => <option key={doctor.id} value={doctor.id}>{doctor.name}</option>)}
+                        {doctors.filter((doctor) => !values.departmentId || doctor.department.id === values.departmentId).map((doctor) => <option key={doctor.id} value={doctor.id}>{formatDoctorName(doctor.name)}</option>)}
                       </select>
                     ) : field.type === 'appointment-status' ? (
                       <select required value={values[field.name] ?? 'PENDING'} onChange={(event) => setValue(field.name, event.target.value)}>
@@ -484,7 +485,7 @@ function appointmentFields(appointment) {
     ['Mobile', appointment.phone],
     ['Email', appointment.email || '—'],
     ['Department', appointment.department?.name],
-    ['Doctor', appointment.doctor?.name || 'No preference'],
+    ['Doctor', appointment.doctor?.name ? formatDoctorName(appointment.doctor.name) : 'No preference'],
     ['Preferred date', displayDate(appointment.preferredDate)],
     ['Preferred time', appointment.preferredTime],
     ['Status', appointment.status],
@@ -496,7 +497,7 @@ function genericColumns(resource) {
     doctors: [
       ['name', 'Doctor'],
       ['qualifications', 'Qualifications'],
-      ['specialty', 'Specialization'],
+      ['specialty', 'Designation'],
       ['department', 'Department'],
       ['isActive', 'Profile'],
     ],
@@ -512,7 +513,12 @@ function genericColumns(resource) {
 
 function formatCell(resource, record, key) {
   const value = record[key];
-  if (key === 'department') return value?.name || '—';
+  if (key === 'department') {
+    return resource === 'doctors' && value?.slug === 'dental-care'
+      ? 'Dental Care'
+      : value?.name || '—';
+  }
+  if (resource === 'doctors' && key === 'name') return formatDoctorName(value);
   if (key === 'isActive') return value ? 'Enabled' : 'Disabled';
   if (key === 'isPublished') return value ? 'Published' : 'Draft';
   if (key === 'updatedAt') return displayDate(value, true);

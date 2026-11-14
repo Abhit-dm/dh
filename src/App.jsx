@@ -3,8 +3,11 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import FloatingActions from './components/FloatingActions.jsx';
+import useHospitalSettings from './hooks/useHospitalSettings.jsx';
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
+import FamilyHealthCare from './pages/FamilyHealthCare.jsx';
+import Testimonials from './pages/Testimonials.jsx';
 import ChildCare from './pages/ChildCare.jsx';
 import EyeCare from './pages/EyeCare.jsx';
 import DentalCare from './pages/DentalCare.jsx';
@@ -15,21 +18,33 @@ import Blog from './pages/Blog.jsx';
 import Appointment from './pages/Appointment.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import AdminLogin from './pages/AdminLogin.jsx';
+import DoctorProfile from './pages/DoctorProfile.jsx';
+import ServiceDepartment from './pages/ServiceDepartment.jsx';
 
 const pageDetails = {
   '/': {
     title: 'DH Hospitals | Child, Eye & Dental Care',
     description:
-      'DH Children & Eye Hospitals provides pediatric care, eye care and dental services in Poranki, Vijayawada.',
+      'DH Hospitals provides family healthcare information and appointment enquiries in Poranki, Vijayawada.',
   },
   '/about': {
     title: 'About Us | DH Hospitals',
-    description: 'Learn about DH Children & Eye Hospitals and its published services.',
+    description: 'About DH Hospitals and its departments in Poranki, Vijayawada.',
+  },
+  '/family-healthcare': {
+    title: 'Family Health Care | DH Hospitals',
+    description:
+      'Explore published DH Hospitals services supporting healthcare across different stages of life.',
+  },
+  '/testimonials': {
+    title: 'Testimonials | DH Hospitals',
+    description:
+      'Patient feedback for DH Hospitals. Testimonials will be published after approval.',
   },
   '/child-care': {
     title: 'Child Care | DH Hospitals',
     description:
-      'Explore pediatric care for newborns, infants and adolescents at DH Children & Eye Hospitals.',
+      'Explore child care information and appointments at DH Hospitals.',
   },
   '/eye-care': {
     title: 'Eye Care | DH Hospitals',
@@ -38,6 +53,22 @@ const pageDetails = {
   '/dental-care': {
     title: 'Dental Care | DH Hospitals',
     description: 'Explore dental services listed by DH Hospitals.',
+  },
+  '/ent': {
+    title: 'ENT | DH Hospitals',
+    description: 'Explore ENT department information and appointment enquiries at DH Hospitals.',
+  },
+  '/general-surgeries': {
+    title: 'General Surgeries | DH Hospitals',
+    description: 'Explore general surgery department information and appointment enquiries at DH Hospitals.',
+  },
+  '/obstetrics-gynecology': {
+    title: 'Obstetrics & Gynecology | DH Hospitals',
+    description: 'Explore obstetrics and gynecology department information at DH Hospitals.',
+  },
+  '/general-medicine': {
+    title: 'General Medicine | DH Hospitals',
+    description: 'Explore general medicine department information and appointment enquiries at DH Hospitals.',
   },
   '/doctors': {
     title: 'Our Doctors | DH Hospitals',
@@ -73,10 +104,16 @@ const pageDetails = {
 
 function PageEffects() {
   const location = useLocation();
+  const { contact } = useHospitalSettings();
 
   useEffect(() => {
     const pagePath = location.pathname.replace(/\/+$/, '') || '/';
-    const details = pageDetails[pagePath] || pageDetails['/'];
+    const details = pagePath.startsWith('/doctors/')
+      ? {
+          title: 'Doctor Profile | DH Hospitals',
+          description: 'View doctor qualifications and appointment information at DH Hospitals.',
+        }
+      : pageDetails[pagePath] || pageDetails['/'];
     const canonicalUrl = `https://dhhospitals.com${pagePath === '/' ? '/' : pagePath}`;
     document.title = details.title;
     const description = document.querySelector('meta[name="description"]');
@@ -147,12 +184,11 @@ function PageEffects() {
       structuredData.textContent = JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'Hospital',
-        name: 'DH Children & Eye Hospitals',
-        alternateName: 'DH Hospitals',
+        name: 'DH Hospitals',
         url: 'https://dhhospitals.com/',
         image: 'https://dhhospitals.com/images/hospital-cover.webp',
-        telephone: '+91 866 258 1123',
-        email: 'contact@dhhospitals.com',
+        telephone: contact.phone,
+        email: contact.email,
         address: {
           '@type': 'PostalAddress',
           streetAddress: 'DH hospitals Road, Behind Chepalakundi, Penamaluru Center',
@@ -216,7 +252,7 @@ function PageEffects() {
     } else {
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
-  }, [location.pathname, location.hash]);
+  }, [contact.email, contact.phone, location.pathname, location.hash]);
 
   return null;
 }
@@ -240,10 +276,17 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/family-healthcare" element={<FamilyHealthCare />} />
+          <Route path="/testimonials" element={<Testimonials />} />
           <Route path="/child-care" element={<ChildCare />} />
           <Route path="/eye-care" element={<EyeCare />} />
           <Route path="/dental-care" element={<DentalCare />} />
+          <Route path="/ent" element={<ServiceDepartment slug="ent" />} />
+          <Route path="/general-surgeries" element={<ServiceDepartment slug="general-surgeries" />} />
+          <Route path="/obstetrics-gynecology" element={<ServiceDepartment slug="obstetrics-gynecology" />} />
+          <Route path="/general-medicine" element={<ServiceDepartment slug="general-medicine" />} />
           <Route path="/doctors" element={<Doctors />} />
+          <Route path="/doctors/:doctorId" element={<DoctorProfile />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/contact" element={<Contact />} />

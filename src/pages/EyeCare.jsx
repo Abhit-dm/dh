@@ -1,12 +1,15 @@
 import { Eye, ScanEye, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { doctors, eyeServices } from '../data/hospital.js';
+import { eyeServices } from '../data/hospital.js';
 import { PageIntro, SectionHeading } from '../components/PageIntro.jsx';
 import ServiceCard from '../components/ServiceCard.jsx';
 import DoctorCard from '../components/DoctorCard.jsx';
 import CallToAction from '../components/CallToAction.jsx';
+import AnimatedCareCharacter from '../components/AnimatedCareCharacter.jsx';
+import usePublicDoctors from '../hooks/usePublicDoctors.js';
 
 export default function EyeCare() {
+  const { doctors } = usePublicDoctors('eye-care');
   return (
     <>
       <main>
@@ -15,24 +18,23 @@ export default function EyeCare() {
           title="Eye care for clear, confident vision."
           description="Explore eye-care services described by DH Hospitals."
           image="/images/vision-screening.webp"
-          imageAlt="Vision screening at DH Eye Hospital"
+          imageAlt="Vision screening at DH Hospitals"
         />
         <section className="section service-detail-intro">
           <div className="container service-detail-layout">
             <div className="service-detail-copy">
-              <span className="eyebrow">DH Eye Hospital</span>
+              <span className="eyebrow">DH Hospitals</span>
               <h2>Advanced Eye Care</h2>
               <p>
-                DH Hospital specializes in cataract and glaucoma surgery, optic
-                nerve treatments, laser and LASIK procedures, and offers expert
-                consultations for optics and contact lenses.
+                DH Hospitals publishes information about vision screening,
+                cataract surgery, LASIK, and related eye-care services.
               </p>
               <Link className="button" to="/appointment?department=Eye%20Care">
                 Book Eye Appointment <span aria-hidden="true">↗</span>
               </Link>
             </div>
             <div className="eye-care-feature">
-              <div className="eye-care-feature-icon"><Eye size={34} strokeWidth={1.5} /></div>
+              <AnimatedCareCharacter type="glasses" />
               <span className="eyebrow">Eye services</span>
               <h3>Screening, surgery &amp; consultation.</h3>
               <p>
@@ -84,7 +86,7 @@ export default function EyeCare() {
               <span className="eyebrow">Eye care specialist</span>
               <h2>Meet your ophthalmologist.</h2>
             </div>
-            <DoctorCard doctor={doctors[1]} />
+            {doctors[0] && <DoctorCard doctor={doctors[0]} />}
           </div>
         </section>
         <CallToAction eyebrow="Eye care appointments" />

@@ -1,9 +1,10 @@
-import { doctors } from '../data/hospital.js';
 import { PageIntro, SectionHeading } from '../components/PageIntro.jsx';
 import DoctorCard from '../components/DoctorCard.jsx';
 import CallToAction from '../components/CallToAction.jsx';
+import usePublicDoctors from '../hooks/usePublicDoctors.js';
 
 export default function Doctors() {
+  const { doctors, error, isLoading } = usePublicDoctors();
   return (
     <>
       <main>
@@ -18,18 +19,21 @@ export default function Doctors() {
           <div className="container">
             <SectionHeading
               eyebrow="Medical team"
-              title="Care from experienced specialists."
+              title="Our hospital doctors."
               description="Explore the published doctor profiles and make an appointment enquiry."
             />
             <div className="doctor-grid">
               {doctors.map((doctor) => (
-                <DoctorCard doctor={doctor} key={doctor.name} />
+                <DoctorCard doctor={doctor} key={doctor.id || doctor.name} />
               ))}
             </div>
-            <p className="doctor-photo-note">
-              Doctor photographs are not displayed because original profile
-              photographs were not available among the accessible official website assets.
-            </p>
+            {isLoading && <p className="doctor-photo-note" role="status">Loading doctor profiles…</p>}
+            {error && <p className="doctor-photo-note" role="status">{error}</p>}
+            {!isLoading && !doctors.some((doctor) => doctor.imageUrl || doctor.image) && (
+              <p className="doctor-photo-note">
+                Doctor photographs display when available in their existing profiles.
+              </p>
+            )}
           </div>
         </section>
         <CallToAction eyebrow="Meet with a specialist" />

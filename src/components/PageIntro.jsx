@@ -1,10 +1,19 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
-export function PageIntro({ eyebrow, title, description, image, imageAlt }) {
+export function PageIntro({
+  eyebrow,
+  title,
+  description,
+  image,
+  imageAlt,
+  imageClassName = '',
+  imageWidth,
+  imageHeight,
+}) {
   return (
     <section className={`page-intro${image ? ' page-intro-with-image' : ''}`}>
-      <div className="container page-intro-inner">
+      <div className={`container page-intro-inner${image ? '' : ' page-intro-inner-text-only'}`}>
         <div className="page-intro-copy">
           <span className="eyebrow">{eyebrow}</span>
           <h1>{title}</h1>
@@ -16,8 +25,14 @@ export function PageIntro({ eyebrow, title, description, image, imageAlt }) {
           </div>
         </div>
         {image && (
-          <div className="page-intro-image">
-            <img src={image} alt={imageAlt || ''} decoding="async" />
+          <div className={`page-intro-image${imageClassName ? ` ${imageClassName}` : ''}`}>
+            <img
+              src={image}
+              alt={imageAlt || ''}
+              width={imageWidth}
+              height={imageHeight}
+              decoding="async"
+            />
           </div>
         )}
       </div>

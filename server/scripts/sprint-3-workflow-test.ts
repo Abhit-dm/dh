@@ -49,11 +49,21 @@ try {
     });
 
     const department = await prisma.department.create({
-      data: { slug: 'child-care', name: 'Child Care' },
+      data: { slug: 'child-care', name: 'Child Care', sortOrder: 1 },
     });
     const eyeDepartment = await prisma.department.create({
-      data: { slug: 'eye-care', name: 'Eye Care' },
+      data: { slug: 'eye-care', name: 'Eye Care', sortOrder: 2 },
     });
+    const dentalDepartment = await prisma.department.create({
+      data: { slug: 'dental-care', name: 'Dental', sortOrder: 3 },
+    });
+    const expectedDepartments = [
+      { slug: 'ent', name: 'ENT', sortOrder: 4 },
+      { slug: 'general-surgeries', name: 'General Surgeries', sortOrder: 5 },
+      { slug: 'obstetrics-gynecology', name: 'Obstetrics & Gynecology', sortOrder: 6 },
+      { slug: 'general-medicine', name: 'General Medicine', sortOrder: 7 },
+    ];
+    await prisma.department.createMany({ data: expectedDepartments });
     const doctor = await prisma.doctor.create({
       data: {
         name: 'Registered Test Doctor',
@@ -68,6 +78,14 @@ try {
         qualifications: 'Verified qualification',
         specialty: 'Ophthalmologist',
         departmentId: eyeDepartment.id,
+      },
+    });
+    const dentalDoctor = await prisma.doctor.create({
+      data: {
+        name: 'DR. SAI HARSHITHA SUNKAVALLY',
+        qualifications: 'BDS - Dental Surgeon.',
+        specialty: 'Dental Surgeon.',
+        departmentId: dentalDepartment.id,
       },
     });
     const inactiveDoctor = await prisma.doctor.create({
@@ -104,7 +122,31 @@ try {
     const allDoctors = (await allDoctorsResponse.json()).data;
     assert.deepEqual(
       allDoctors.map((item: { id: string }) => item.id).sort(),
-      [doctor.id, eyeDoctor.id].sort(),
+      [doctor.id, eyeDoctor.id, dentalDoctor.id].sort(),
+    );
+    assert.deepEqual(
+      allDoctors.map((item: { name: string }) => item.name),
+      ['Registered Test Doctor', 'Registered Eye Doctor', 'DR. SAI HARSHITHA SUNKAVALLY'],
+    );
+    const dentalProfile = allDoctors.find((item: { id: string }) => item.id === dentalDoctor.id);
+    assert.equal(dentalProfile.name, 'DR. SAI HARSHITHA SUNKAVALLY');
+    assert.equal(dentalProfile.department.name, 'Dental Care');
+    const departmentsResponse = await readPublicRequest(
+      request(`${appOrigin}/api/public/departments`, 'GET'),
+      { params: Promise.resolve({ resource: 'departments' }) },
+    );
+    const publicDepartments = (await departmentsResponse.json()).data;
+    assert.deepEqual(
+      publicDepartments.map((item: { name: string }) => item.name),
+      [
+        'Child Care',
+        'Eye Care',
+        'Dental',
+        'ENT',
+        'General Surgeries',
+        'Obstetrics & Gynecology',
+        'General Medicine',
+      ],
     );
     const filteredDoctorsResponse = await readPublicRequest(
       request(`${appOrigin}/api/public/doctors?department=${department.slug}`, 'GET'),

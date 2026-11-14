@@ -2,6 +2,10 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { contact as verifiedContact, socialLinks as verifiedSocialLinks } from '../data/hospital.js';
 
 const HospitalSettingsContext = createContext(null);
+const fallbackContact = {
+  ...verifiedContact,
+  phoneLink: verifiedContact.phone.replace(/[^\d+]/g, ''),
+};
 
 function settingString(value, fallback) {
   return typeof value === 'string' && value.trim() ? value.trim() : fallback;
@@ -55,7 +59,6 @@ export function HospitalSettingsProvider({ children }) {
 
   const settings = useMemo(() => {
     const phone = settingString(values['contact.phone'], verifiedContact.phone);
-    const emergency = settingString(values['contact.emergency'], verifiedContact.emergency);
     const email = settingString(values['contact.email'], verifiedContact.email);
     const hoursValue = values['contact.hours'];
     const hours = Array.isArray(hoursValue) && hoursValue.every(
@@ -66,8 +69,6 @@ export function HospitalSettingsProvider({ children }) {
         address: settingString(values['contact.address'], verifiedContact.address),
         phone,
         phoneLink: phone.replace(/[^\d+]/g, ''),
-        landline: settingString(values['contact.landline'], verifiedContact.landline),
-        emergency,
         email,
         hours,
       },
@@ -92,7 +93,7 @@ export function HospitalSettingsProvider({ children }) {
 
 export default function useHospitalSettings() {
   return useContext(HospitalSettingsContext) ?? {
-    contact: verifiedContact,
+    contact: fallbackContact,
     logoUrl: '/images/dh-hospitals-logo.png',
     socialLinks: verifiedSocialLinks,
     homepage: {

@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom';
-import { dentalServices, doctors } from '../data/hospital.js';
+import { dentalServices } from '../data/hospital.js';
 import { PageIntro, SectionHeading } from '../components/PageIntro.jsx';
 import ServiceCard from '../components/ServiceCard.jsx';
 import DoctorCard from '../components/DoctorCard.jsx';
 import CallToAction from '../components/CallToAction.jsx';
+import usePublicDoctors from '../hooks/usePublicDoctors.js';
+import AnimatedCareCharacter from '../components/AnimatedCareCharacter.jsx';
 
 export default function DentalCare() {
+  const { doctors } = usePublicDoctors('dental-care');
   return (
     <>
       <main>
@@ -21,6 +24,9 @@ export default function DentalCare() {
             <div>
               <span className="eyebrow">Dental services</span>
               <h2>Care for healthy smiles.</h2>
+              <div className="dental-intro-mascot">
+                <AnimatedCareCharacter type="tooth" />
+              </div>
             </div>
             <p>
               Explore the dental services listed on the DH Hospitals website.
@@ -56,7 +62,7 @@ export default function DentalCare() {
               <span className="eyebrow">Dental surgeon</span>
               <h2>Meet your dental care provider.</h2>
             </div>
-            <DoctorCard doctor={doctors[2]} />
+            {doctors[0] && <DoctorCard doctor={doctors[0]} />}
           </div>
         </section>
         <CallToAction eyebrow="Dental care appointments" />

@@ -5,6 +5,8 @@ import {
   Baby,
   Eye,
   HeartHandshake,
+  Siren,
+  ScanLine,
   ScanEye,
   Stethoscope,
 } from 'lucide-react';
@@ -13,13 +15,15 @@ import useHospitalSettings from '../hooks/useHospitalSettings.jsx';
 import {
   childServices,
   dentalServices,
-  doctors,
   eyeServices,
   galleryImages,
+  CHILD_CARE_MAIN_IMAGE,
 } from '../data/hospital.js';
 import DoctorCard from '../components/DoctorCard.jsx';
 import Reveal from '../components/Reveal.jsx';
 import CallToAction from '../components/CallToAction.jsx';
+import SpecializationGrid from '../components/SpecializationGrid.jsx';
+import usePublicDoctors from '../hooks/usePublicDoctors.js';
 
 const careHighlights = [
   {
@@ -50,6 +54,18 @@ const careHighlights = [
       'Explore dental services and contact the hospital for information about care.',
     to: '/dental-care',
   },
+  {
+    icon: Siren,
+    title: '24/7 Emergency',
+    description: 'DH Hospitals provides emergency services around the clock.',
+    to: '/contact',
+  },
+  {
+    icon: ScanLine,
+    title: 'Diagnostics',
+    description: 'Contact DH Hospitals for information about diagnostics services.',
+    to: '/contact',
+  },
 ];
 
 const highlightedDentalServices = [
@@ -59,12 +75,32 @@ const highlightedDentalServices = [
   dentalServices[6],
 ];
 
-function CareFeature({ eyebrow, title, description, image, imageAlt, to, link, icon: Icon, reverse = false }) {
+function CareFeature({
+  eyebrow,
+  title,
+  description,
+  image,
+  imageAlt,
+  imageClassName = '',
+  imageWidth,
+  imageHeight,
+  to,
+  link,
+  icon: Icon,
+  reverse = false,
+}) {
   return (
     <section className={`story-section${reverse ? ' story-section-reverse' : ''}`}>
       <div className="container story-layout">
-        <Reveal className="story-image-wrap">
-          <img src={image} alt={imageAlt} loading="lazy" decoding="async" />
+        <Reveal className={`story-image-wrap${imageClassName ? ` ${imageClassName}` : ''}`}>
+          <img
+            src={image}
+            alt={imageAlt}
+            width={imageWidth}
+            height={imageHeight}
+            loading="lazy"
+            decoding="async"
+          />
           <span className="story-image-mark">
             <Icon size={19} aria-hidden="true" />
             DH Hospitals
@@ -85,6 +121,7 @@ function CareFeature({ eyebrow, title, description, image, imageAlt, to, link, i
 
 export default function Home() {
   const { contact, homepage } = useHospitalSettings();
+  const { doctors, error: doctorLoadError } = usePublicDoctors();
   return (
     <main>
       <section className="hero cinematic-hero">
@@ -99,7 +136,7 @@ export default function Home() {
         <div className="hero-shade" />
         <div className="container hero-content">
           <span className="eyebrow eyebrow-light">
-            DH Children &amp; Eye Hospitals
+            DH Hospitals
           </span>
           <h1>{homepage.heroTitle}</h1>
           <p>{homepage.heroDescription}</p>
@@ -120,16 +157,17 @@ export default function Home() {
 
       <section className="home-intro-band" aria-label="Hospital introduction">
         <div className="container home-intro-inner">
-          <span className="eyebrow">A hospital for children &amp; families</span>
+          <span className="eyebrow">A hospital for families</span>
           <p>
-            Care for children&apos;s health, vision, and dental needs at DH
-            Children &amp; Eye Hospitals.
+            Care for children&apos;s health, vision, and dental needs at DH Hospitals.
           </p>
           <Link className="text-link" to="/about">
             About the hospital <ArrowUpRight size={15} aria-hidden="true" />
           </Link>
         </div>
       </section>
+
+      <SpecializationGrid />
 
       <section className="section home-services" id="services">
         <div className="container">
@@ -140,8 +178,7 @@ export default function Home() {
             </Reveal>
             <Reveal>
               <p>
-                Explore the pediatric, eye-care, and dental services listed by
-                DH Hospitals.
+                Explore the seven departments and the services listed by DH Hospitals.
               </p>
             </Reveal>
           </div>
@@ -154,8 +191,10 @@ export default function Home() {
                   aria-label="Explore Child Care"
                 >
                   <img
-                    src="/images/index-about.webp"
-                    alt="Child care services at DH Hospitals"
+                    src={CHILD_CARE_MAIN_IMAGE}
+                    alt="Child Care at DH Hospitals – Doctor caring for a young patient."
+                    width={1536}
+                    height={1024}
                     loading="lazy"
                     decoding="async"
                   />
@@ -182,7 +221,7 @@ export default function Home() {
                 >
                   <img
                     src="/images/vision-screening.webp"
-                    alt="Vision screening at DH Eye Hospital"
+                    alt="Vision screening at DH Hospitals"
                     loading="lazy"
                     decoding="async"
                   />
@@ -234,9 +273,12 @@ export default function Home() {
       <CareFeature
         eyebrow="Child Care"
         title="Caring for every stage of childhood."
-        description="Pediatric care at DH Children & Eye Hospitals is described for newborns, infants, and adolescents up to 18 years old. Published services include care for skin problems, nebulization, and diet feeding counseling."
-        image="/images/index-about.webp"
-        imageAlt="Pediatric care at DH Children & Eye Hospitals"
+        description="Pediatric care at DH Hospitals is described for newborns, infants, and adolescents up to 18 years old. Published services include care for skin problems, nebulization, and diet feeding counseling."
+        image={CHILD_CARE_MAIN_IMAGE}
+        imageAlt="Child Care at DH Hospitals – Doctor caring for a young patient."
+        imageClassName="child-care-feature-image"
+        imageWidth={1536}
+        imageHeight={1024}
         to="/child-care"
         link="Discover Child Care"
         icon={Baby}
@@ -246,8 +288,8 @@ export default function Home() {
         eyebrow="Eye Care"
         title="Care for clearer vision."
         description="DH Hospitals lists vision screening, cataract surgery, and LASIK, and describes glaucoma surgery, optic nerve treatments, laser procedures, and optics and contact lens consultations."
-        image="/images/index-about-2.webp"
-        imageAlt="Eye-care services at DH Hospitals"
+        image="/images/glaucoma-tonometry.jpg"
+        imageAlt="A clinician measuring a patient’s eye pressure during an eye exam."
         to="/eye-care"
         link="Discover Eye Care"
         icon={Eye}
@@ -277,7 +319,7 @@ export default function Home() {
           </Reveal>
           <Reveal className="dental-story-image">
             <img
-              src="/images/general-dentistry.webp"
+              src="/images/cosmetic-dentistry.webp"
               alt="Dental care services"
               loading="lazy"
               decoding="async"
@@ -291,8 +333,8 @@ export default function Home() {
         <div className="container">
           <div className="why-heading">
             <div>
-              <span className="eyebrow">Why DH Hospitals</span>
-              <h2>Care informed by your needs.</h2>
+              <span className="eyebrow">Our approach</span>
+              <h2>Why DH Hospitals?</h2>
             </div>
             <p>
               Explore the services and information published by DH Hospitals
@@ -324,11 +366,11 @@ export default function Home() {
           <Reveal className="facilities-image">
             <img
               src="/images/hospital-cover.webp"
-              alt="Hospital care at DH Children & Eye Hospitals"
+              alt="Hospital care at DH Hospitals"
               loading="lazy"
               decoding="async"
             />
-            <span>DH Children &amp; Eye Hospitals · Poranki</span>
+            <span>DH Hospitals · Poranki</span>
           </Reveal>
           <Reveal className="facilities-copy">
             <span className="eyebrow">Hospital information</span>
@@ -364,10 +406,7 @@ export default function Home() {
               </Reveal>
             ))}
           </div>
-          <p className="doctor-photo-note">
-            Original doctor photographs were not available in the published
-            hospital assets.
-          </p>
+          {doctorLoadError && <p className="doctor-photo-note" role="status">{doctorLoadError}</p>}
         </div>
       </section>
 

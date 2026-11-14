@@ -1,10 +1,11 @@
 import { Baby, HeartHandshake, Stethoscope } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { childServices, doctors } from '../data/hospital.js';
+import { CHILD_CARE_MAIN_IMAGE, childServices } from '../data/hospital.js';
 import { PageIntro, SectionHeading } from '../components/PageIntro.jsx';
 import ServiceCard from '../components/ServiceCard.jsx';
 import DoctorCard from '../components/DoctorCard.jsx';
 import CallToAction from '../components/CallToAction.jsx';
+import usePublicDoctors from '../hooks/usePublicDoctors.js';
 
 const childCareLinks = [
   {
@@ -28,6 +29,7 @@ const childCareLinks = [
 ];
 
 export default function ChildCare() {
+  const { doctors } = usePublicDoctors('child-care');
   const doctor = doctors[0];
   return (
     <>
@@ -35,9 +37,12 @@ export default function ChildCare() {
         <PageIntro
           eyebrow="Child Care"
           title="Caring for your child’s health."
-          description="Experience comprehensive medical care for children at DH Children & Eye Hospitals."
-          image="/images/index-about.webp"
-          imageAlt="DH Children & Eye Hospitals"
+          description="Explore child care information and services at DH Hospitals."
+          image={CHILD_CARE_MAIN_IMAGE}
+          imageAlt="Child Care at DH Hospitals – Doctor caring for a young patient."
+          imageClassName="child-care-page-image"
+          imageWidth={1536}
+          imageHeight={1024}
         />
         <section className="section service-detail-intro">
           <div className="container service-detail-layout">
@@ -45,8 +50,8 @@ export default function ChildCare() {
               <span className="eyebrow">Our children&apos;s medical services</span>
               <h2>Comprehensive Pediatric Care</h2>
               <p>
-                Experience comprehensive medical care for children at DH
-                Children &amp; Eye Hospitals. Services cater to newborns,
+                Published information from DH Hospitals describes care for
+                newborns,
                 infants, and adolescents up to 18 years old. From skin problems
                 to nebulization and diet feeding counseling, the hospital
                 describes care for children’s health needs.
@@ -55,9 +60,16 @@ export default function ChildCare() {
                 Book a child care appointment <span aria-hidden="true">↗</span>
               </Link>
             </div>
-            <div className="service-detail-image">
-              <img src="/images/hospital-cover.webp" alt="DH Hospitals" loading="lazy" decoding="async" />
-              <span className="image-caption">DH Children &amp; Eye Hospitals</span>
+            <div className="service-detail-image child-care-detail-image">
+              <img
+                src={CHILD_CARE_MAIN_IMAGE}
+                alt="Child Care at DH Hospitals – Doctor caring for a young patient."
+                width={1536}
+                height={1024}
+                loading="lazy"
+                decoding="async"
+              />
+              <span className="image-caption">DH Hospitals</span>
             </div>
           </div>
         </section>
@@ -87,7 +99,7 @@ export default function ChildCare() {
             <SectionHeading
               eyebrow="Children's care"
               title="Care for your child."
-              description="Pediatric services listed by DH Children & Eye Hospitals."
+              description="Pediatric services listed by DH Hospitals."
             />
             <div className="service-grid">
               {childServices.map((service) => (
@@ -106,12 +118,12 @@ export default function ChildCare() {
               <span className="eyebrow">Expert pediatricians</span>
               <h2>Guidance from an experienced pediatrician.</h2>
               <p>
-                DH Children &amp; Eye Hospitals describes its pediatricians as
+                DH Hospitals describes its pediatricians as
                 experienced medical professionals dedicated to specialized
                 care for children and their well-being.
               </p>
             </div>
-            <DoctorCard doctor={doctor} />
+            {doctor && <DoctorCard doctor={doctor} />}
           </div>
         </section>
         <CallToAction eyebrow="Child care appointments" />

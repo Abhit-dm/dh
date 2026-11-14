@@ -4,6 +4,9 @@ import useHospitalSettings from '../hooks/useHospitalSettings.jsx';
 
 const footerLinks = [
   ['About Us', '/about'],
+  ['Our Services', '/about'],
+  ['Family Health Care', '/family-healthcare'],
+  ['Testimonials', '/testimonials'],
   ['Child Care', '/child-care'],
   ['Eye Care', '/eye-care'],
   ['Dental Care', '/dental-care'],
@@ -24,7 +27,7 @@ export default function Footer() {
             <img src={logoUrl} alt="DH Hospitals" />
           </Link>
           <p>
-            DH Children &amp; Eye Hospitals provides pediatric care, eye care,
+            DH Hospitals shares pediatric care, eye care,
             and dental services in Poranki, Vijayawada.
           </p>
           <Link className="footer-social" to="/contact">
@@ -50,7 +53,7 @@ export default function Footer() {
         <div className="footer-column">
           <h2>Explore</h2>
           {footerLinks.map(([label, to]) => (
-            <Link key={to} to={to}>
+            <Link key={label} to={to}>
               {label}
             </Link>
           ))}
@@ -74,7 +77,7 @@ export default function Footer() {
             <span>© {new Date().getFullYear()} DH Hospitals. All Rights Reserved.</span>
             <span>Website Maintained by Abhit Technologies</span>
           </div>
-          <span>Child Care · Eye Care · Dental Care</span>
+          <span>Child Care · Eye Care · Dental</span>
         </div>
       </div>
     </footer>

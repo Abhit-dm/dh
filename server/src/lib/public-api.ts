@@ -45,14 +45,27 @@ export async function getPublicResource(request: NextRequest, resource: string) 
   }
 
   if (resource === 'doctors') {
-    const data = await prisma.doctor.findMany({
+    const records = await prisma.doctor.findMany({
       where: {
         isActive: true,
         ...(departmentSlug ? { department: { slug: departmentSlug, isActive: true } } : {}),
       },
       select: publicDoctorSelect,
-      orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
+      orderBy: [
+        { department: { sortOrder: 'asc' } },
+        { sortOrder: 'asc' },
+        { name: 'asc' },
+      ],
     });
+    const data = records.map((doctor) => ({
+      ...doctor,
+      department: {
+        ...doctor.department,
+        ...(doctor.department.slug === 'dental-care'
+          ? { name: 'Dental Care' }
+          : {}),
+      },
+    }));
     return NextResponse.json({ data }, { headers: { 'Cache-Control': 'no-store' } });
   }
 

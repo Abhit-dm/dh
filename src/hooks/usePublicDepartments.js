@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import { specializations } from '../data/specializations.js';
 
-const fallbackDepartments = [
-  { slug: 'child-care', name: 'Child Care' },
-  { slug: 'eye-care', name: 'Eye Care' },
-  { slug: 'dental-care', name: 'Dental Care' },
-];
+const fallbackDepartments = specializations.map(({ slug, name, description }) => ({
+  slug,
+  name,
+  description,
+}));
 
 export default function usePublicDepartments() {
   const [departments, setDepartments] = useState(fallbackDepartments);

@@ -2,6 +2,7 @@ import { HeartHandshake, Eye, Stethoscope } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PageIntro, SectionHeading } from '../components/PageIntro.jsx';
 import CallToAction from '../components/CallToAction.jsx';
+import SpecializationGrid from '../components/SpecializationGrid.jsx';
 
 const hospitalServices = [
   {
@@ -14,7 +15,7 @@ const hospitalServices = [
     icon: Eye,
     title: 'Eye Care',
     description:
-      'DH Hospital specializes in cataract and glaucoma surgery, optic nerve treatments, laser and LASIK procedures.',
+      'DH Hospitals publishes information about cataract and glaucoma surgery, optic nerve treatments, laser and LASIK procedures.',
   },
   {
     icon: Stethoscope,
@@ -30,22 +31,23 @@ export default function About() {
       <main>
         <PageIntro
           eyebrow="About Us"
-          title="About DH Children & Eye Hospitals"
-          description="Caring for your child’s health at DH Children & Eye Hospitals."
-          image="/images/index-about.webp"
-          imageAlt="DH Hospitals"
+          title="About DH Hospitals"
+          image="/images/about-family-healthcare.jpg"
+          imageAlt="A clinician consulting with older and younger family members."
         />
         <section className="section about-story">
           <div className="container about-story-layout">
             <div>
               <span className="eyebrow">Our hospital</span>
-              <h2>Caring for Every Child&apos;s Health and Vision.</h2>
+              <h2>Complete care for your family.</h2>
+              <blockquote className="about-family-quote">
+                “Complete care for your family from newborn to elderly”
+              </blockquote>
             </div>
             <div className="about-story-copy">
               <p>
-                DH Children &amp; Eye Hospitals provides comprehensive medical
-                care for children, eye care, and dental services in Poranki,
-                Vijayawada.
+                DH Hospitals serves families in Poranki, Vijayawada, with
+                published information about its departments and services.
               </p>
               <p>
                 The hospital’s published pediatric services cater to newborns,
@@ -59,6 +61,12 @@ export default function About() {
             </div>
           </div>
         </section>
+        <SpecializationGrid
+          id="about-specializations"
+          eyebrow="Departments"
+          title="Seven services at DH Hospitals."
+          description="Explore department information and appointment enquiries."
+        />
         <section className="section about-services">
           <div className="container">
             <SectionHeading

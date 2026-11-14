@@ -7,7 +7,7 @@
   --tint: #faf7fb;
   --orange-tint: #fff3e9;
   --white: #ffffff;
-  --container: 1180px;
+  --container: 1500px;
   font-family: 'Segoe UI', 'Aptos', sans-serif;
   color: var(--ink);
   background: var(--white);
@@ -26,7 +26,7 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--white);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.7;
 }
 
@@ -773,6 +773,127 @@ textarea:focus-visible {
   margin-top: 20px;
 }
 
+.specialization-section {
+  background: var(--tint);
+}
+
+.specialization-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 18px;
+}
+
+.specialization-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--white);
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.specialization-image {
+  width: 100%;
+  height: 176px;
+  object-fit: cover;
+  background: var(--tint);
+}
+
+.specialization-card-content {
+  display: flex;
+  min-height: 238px;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 23px;
+}
+
+.specialization-card:hover,
+.specialization-card:focus-within {
+  transform: translateY(-4px);
+  border-color: rgba(107, 44, 133, 0.3);
+  box-shadow: 0 15px 34px rgba(53, 32, 62, 0.1);
+}
+
+.specialization-card-top {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.specialization-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  background: var(--orange-tint);
+  color: var(--primary-purple);
+}
+
+.specialization-number {
+  color: #c8b7ce;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.specialization-card h3 {
+  margin-bottom: 9px;
+  font-size: 1.08rem;
+}
+
+.specialization-card p {
+  flex: 1;
+  margin-bottom: 18px;
+  font-size: 0.86rem;
+}
+
+.specialization-card .text-link {
+  margin-top: auto;
+}
+
+.doctor-profile-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(36px, 7vw, 90px);
+}
+
+.doctor-profile-photo {
+  width: 100%;
+  max-height: 520px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--tint);
+}
+
+.doctor-profile-photo-unavailable {
+  display: grid;
+  place-items: center;
+  color: var(--primary-purple);
+}
+
+.doctor-profile-copy .doctor-qualification {
+  margin-bottom: 8px;
+  color: var(--primary-purple);
+  font-weight: 700;
+}
+
+.doctor-profile-copy .button {
+  margin-top: 25px;
+}
+
+.doctor-profile-state {
+  min-height: 50vh;
+  padding-bottom: 30px;
+}
+
+.doctor-profile-back {
+  padding-top: 20px;
+}
+
 .home-care-note {
   padding-block: 57px;
   background: var(--orange-tint);
@@ -855,7 +976,7 @@ textarea:focus-visible {
 
 .page-intro-image {
   position: relative;
-  height: 240px;
+  height: clamp(280px, 18vw, 360px);
 }
 
 .page-intro-image::before {
@@ -890,6 +1011,17 @@ textarea:focus-visible {
   max-width: 460px;
 }
 
+.about-family-quote {
+  max-width: 460px;
+  border-left: 3px solid var(--primary-orange);
+  margin: 18px 0 0;
+  padding-left: 18px;
+  color: var(--primary-purple);
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
 .about-story-copy p + p {
   margin-top: 16px;
 }
@@ -900,6 +1032,68 @@ textarea:focus-visible {
 
 .about-services {
   background: var(--tint);
+}
+
+.family-healthcare-section {
+  background: var(--tint);
+}
+
+.family-care-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.family-care-card {
+  display: flex;
+  min-height: 250px;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid var(--line);
+  padding: 28px;
+  background: var(--white);
+}
+
+.family-care-number {
+  margin-bottom: 20px;
+  color: var(--primary-orange);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.family-care-card h3 {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.family-care-card p {
+  flex: 1;
+  margin-bottom: 18px;
+  font-size: 0.9rem;
+}
+
+.testimonials-section {
+  background: var(--tint);
+}
+
+.testimonial-placeholder {
+  max-width: 760px;
+  border-left: 3px solid var(--primary-orange);
+  margin-inline: auto;
+  padding: 28px;
+  background: var(--white);
+}
+
+.testimonial-placeholder > p {
+  margin-block: 16px 10px;
+  color: var(--primary-purple);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.testimonial-placeholder > span:last-child {
+  font-size: 0.85rem;
 }
 
 .about-service-grid {
@@ -1450,6 +1644,18 @@ textarea:focus-visible {
   line-height: 1.35;
 }
 
+.doctor-retry-button {
+  margin-top: 6px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.doctor-retry-button:disabled {
+  cursor: wait;
+}
+
 .form-field textarea + small {
   color: var(--muted);
 }
@@ -1922,7 +2128,7 @@ textarea:focus-visible {
 
 @media (max-width: 640px) {
   body {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .container {
@@ -2013,9 +2219,14 @@ textarea:focus-visible {
   .service-grid-three,
   .highlight-grid,
   .about-service-grid,
+  .family-care-grid,
   .care-option-grid,
   .doctor-grid {
     grid-template-columns: 1fr;
+  }
+
+  .family-care-card {
+    min-height: 0;
   }
 
   .service-image-link {
@@ -3360,6 +3571,16 @@ textarea:focus-visible {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  @media (max-width: 640px) {
+    .doctor-profile-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .doctor-profile-photo {
+      max-height: 380px;
+    }
   }
 
   .reveal[data-reveal-pending]:not(.is-visible) {
@@ -4895,5 +5116,259 @@ textarea:focus-visible {
     animation: none;
     scroll-behavior: auto;
     transition: none;
+  }
+}
+
+.nav-service-menu {
+  position: relative;
+}
+
+.nav-services-trigger {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  line-height: inherit;
+}
+
+.nav-service-dropdown {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% - 12px);
+  left: 0;
+  display: grid;
+  min-width: 250px;
+  border: 1px solid var(--line);
+  padding: 8px;
+  background: var(--white);
+  box-shadow: 0 16px 30px rgba(53, 32, 62, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+  visibility: hidden;
+  transition: opacity 160ms ease, transform 160ms ease, visibility 160ms;
+}
+
+.nav-service-menu.is-open .nav-service-dropdown {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.nav-service-dropdown .nav-link {
+  display: block;
+  padding: 10px 12px;
+  font-size: 0.82rem;
+}
+
+.nav-service-dropdown .nav-link::after {
+  display: none;
+}
+
+.nav-service-dropdown .nav-link:hover,
+.nav-service-dropdown .nav-link.is-active {
+  background: var(--tint);
+}
+
+.child-care-page-image img,
+.child-care-detail-image img {
+  object-fit: contain;
+  background: var(--white);
+}
+
+.child-care-feature-image {
+  min-height: 0;
+}
+
+.child-care-feature-image img {
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
+  background: var(--white);
+}
+
+.page-intro-inner-text-only {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.page-intro-inner-text-only .page-intro-copy {
+  max-width: 760px;
+}
+
+.service-department-copy {
+  max-width: 780px;
+}
+
+.care-mascot-stage {
+  display: flex;
+  width: 180px;
+  height: 145px;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.care-mascot-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.care-mascot-fall {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation:
+    care-mascot-land 950ms cubic-bezier(0.2, 0.78, 0.35, 1.18) both,
+    care-mascot-float 4.6s ease-in-out 950ms infinite;
+}
+
+.care-mascot-eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: care-mascot-blink 4.8s ease-in-out 1.5s infinite;
+}
+
+.care-mascot-wave {
+  transform-box: fill-box;
+  transform-origin: 12% 18%;
+  animation: care-mascot-wave 1.8s ease-in-out 1.2s infinite;
+}
+
+.eye-care-feature .care-mascot-stage {
+  width: min(100%, 260px);
+  height: auto;
+  aspect-ratio: 240 / 190;
+  margin: -20px auto 5px;
+}
+
+.dental-intro-mascot {
+  width: 150px;
+  height: 125px;
+  margin-top: 7px;
+}
+
+.dental-intro-mascot .care-mascot-stage {
+  width: 100%;
+  height: 100%;
+}
+
+.nav-service-menu {
+  flex: 0 0 auto;
+}
+
+@keyframes care-mascot-land {
+  0% {
+    transform: translateY(-42px) scale(0.9);
+  }
+  68% {
+    transform: translateY(7px) scale(1.035, 0.97);
+  }
+  86% {
+    transform: translateY(-4px) scale(0.99, 1.015);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes care-mascot-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes care-mascot-blink {
+  0%,
+  91%,
+  100% {
+    transform: scaleY(1);
+  }
+  94%,
+  97% {
+    transform: scaleY(0.08);
+  }
+}
+
+@keyframes care-mascot-wave {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25%,
+  65% {
+    transform: rotate(-17deg);
+  }
+  45%,
+  85% {
+    transform: rotate(8deg);
+  }
+}
+
+@media (max-width: 860px) {
+  .eye-care-feature .care-mascot-stage {
+    width: min(100%, 230px);
+  }
+}
+
+@media (max-width: 1100px) {
+  .nav-service-menu {
+    grid-column: 1 / -1;
+  }
+
+  .nav-services-trigger {
+    padding-block: 10px;
+  }
+
+  .nav-service-dropdown {
+    position: static;
+    display: none;
+    min-width: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 10px;
+    border: 0;
+    border-left: 1px solid var(--line);
+    margin: 0 0 8px 8px;
+    padding: 0 0 0 10px;
+    box-shadow: none;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    visibility: visible;
+  }
+
+  .nav-service-menu.is-open .nav-service-dropdown {
+    display: grid;
+  }
+
+  .nav-service-dropdown .nav-link {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 640px) {
+  .eye-care-feature .care-mascot-stage {
+    width: min(100%, 210px);
+  }
+
+  .nav-service-dropdown {
+    grid-template-columns: 1fr;
+  }
+
+  .care-mascot-stage {
+    width: 155px;
+    height: 128px;
+  }
+
+  .dental-intro-mascot {
+    width: 136px;
+    height: 112px;
   }
 }
