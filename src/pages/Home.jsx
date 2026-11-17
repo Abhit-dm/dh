@@ -121,7 +121,7 @@ function CareFeature({
 
 export default function Home() {
   const { contact, homepage } = useHospitalSettings();
-  const { doctors, error: doctorLoadError } = usePublicDoctors();
+  const { doctors } = usePublicDoctors();
   return (
     <main>
       <section className="hero cinematic-hero">
@@ -406,7 +406,6 @@ export default function Home() {
               </Reveal>
             ))}
           </div>
-          {doctorLoadError && <p className="doctor-photo-note" role="status">{doctorLoadError}</p>}
         </div>
       </section>
 

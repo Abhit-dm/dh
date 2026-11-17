@@ -19,6 +19,8 @@
 - Completed the requested navigation changes: Family Healthcare and Testimonials route to the user-selected /about page with About Us as the only active underline; the footer Our Services link no longer jumps to a Home anchor; navigation/footer keys are unique. Production build passes, route/service clicks and browser history/refresh work, hover and mouse-out behavior are correct, and 42 route/viewport checks found no horizontal overflow or broken local images.
 - Completed the current request's dropdown behavior, navigation typography, image-reuse, and spacious-layout refinements in Header.jsx, index.css, and Home.jsx. Verified route selection, active underline/hover, responsive dropdown behavior, image loading, and page widths at desktop/tablet/mobile sizes.
 - Implemented service-specific imagery, dedicated Family Health Care and Testimonials pages, the exact About Us quote and family image, active-route navigation, and API-origin setup guidance. Frontend build, API integration, API typecheck, route HTTP checks, and local image-path validation passed.
+- Diagnosed the recurring doctor-unavailable message: the separate local API was stopped on port 3001. Restarted it with `npm run dev:api` and verified `/api/public/doctors` returns HTTP 200 with three doctors.
+- Updated appointment, Home, and Doctors screens to avoid repeating transient doctor-fetch errors; the appointment doctor preference is labeled optional and remains blank when the API cannot supply doctor IDs. Frontend production build passed.
 
 ## 💡 Key Decisions Made
 - Retained the existing React/Vite app and added a separate TypeScript Next.js API rather than replacing the frontend.
@@ -43,6 +45,7 @@
 - Restored the original tracked public/images/lasik-surgery.jpg after detecting a filename collision; the new photo is preserved separately at public/images/lasik-surgery-content.jpg. No other existing image files were overwritten. Logged as decision-1794571095451-i4os8g.
 - LASIK Surgery now references lasik-surgery-content.jpg; the original tracked lasik-surgery.jpg remains unchanged. Logged as decision-1794571118547-xkb8qd.
 - Resolved local Vite proxy ECONNREFUSED: port 3001 had no API listener. Started the Next.js API with `npm run dev:api` and verified health, doctors, and website-settings return HTTP 200 through the Vite proxy. API remains a separate development process; see operational decision 1794630887258-hd0utz.
+- When the appointment doctor API fails, avoid showing repeated unavailable banners; doctor selection is optional, and the form can proceed without a doctor.
 
 ## 🚧 Blockers & Challenges
 - The target Hostinger plan's durable writable path, Node.js support, and native `better-sqlite3` compatibility still need confirmation. Local temporary SQLite migration, seed, API, and admin workflow tests passed.

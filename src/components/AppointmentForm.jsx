@@ -64,7 +64,6 @@ export default function AppointmentForm({ initialDepartment = '' }) {
   const [doctors, setDoctors] = useState([]);
   const [doctorLoadError, setDoctorLoadError] = useState('');
   const [isLoadingDoctors, setIsLoadingDoctors] = useState(false);
-  const [doctorLoadAttempt, setDoctorLoadAttempt] = useState(0);
   const submissionInProgress = useRef(false);
   const today = todayInIndia();
 
@@ -98,7 +97,7 @@ export default function AppointmentForm({ initialDepartment = '' }) {
       });
 
     return () => controller.abort();
-  }, [form.department, doctorLoadAttempt]);
+  }, [form.department]);
 
   function updateField(event) {
     const { name, value, type, checked } = event.target;
@@ -330,7 +329,7 @@ export default function AppointmentForm({ initialDepartment = '' }) {
           {errors.time && <small id="error-time">{errors.time}</small>}
         </label>
         <div className="form-field">
-          <span id="appointment-doctor-label">Preferred Doctor</span>
+          <span id="appointment-doctor-label">Preferred Doctor (optional)</span>
           <select
             aria-labelledby="appointment-doctor-label"
             name="doctorId"
@@ -338,15 +337,13 @@ export default function AppointmentForm({ initialDepartment = '' }) {
             onChange={updateField}
             disabled={isLoadingDoctors || doctors.length === 0}
             aria-invalid={Boolean(errors.doctorId)}
-            aria-describedby={
-              errors.doctorId ? 'error-doctorId' : doctorLoadError ? 'error-doctor-load' : undefined
-            }
+            aria-describedby={errors.doctorId ? 'error-doctorId' : undefined}
           >
             <option value="">
               {isLoadingDoctors
                 ? 'Loading doctors…'
                 : doctorLoadError
-                  ? 'Doctors unavailable'
+                  ? 'No preference'
                   : doctors.length
                     ? 'Select Preferred Doctor'
                     : 'No doctors available'}
@@ -358,17 +355,6 @@ export default function AppointmentForm({ initialDepartment = '' }) {
             ))}
           </select>
           {errors.doctorId && <small id="error-doctorId">{errors.doctorId}</small>}
-          {doctorLoadError && <small id="error-doctor-load" role="status">{doctorLoadError}</small>}
-          {doctorLoadError && (
-            <button
-              className="text-link doctor-retry-button"
-              type="button"
-              onClick={() => setDoctorLoadAttempt((attempt) => attempt + 1)}
-              disabled={isLoadingDoctors}
-            >
-              {isLoadingDoctors ? 'Retrying…' : 'Retry loading doctors'}
-            </button>
-          )}
           {!isLoadingDoctors && !doctorLoadError && !doctors.length && (
             <small>No active doctors are available right now.</small>
           )}

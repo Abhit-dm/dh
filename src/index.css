@@ -1644,18 +1644,6 @@ textarea:focus-visible {
   line-height: 1.35;
 }
 
-.doctor-retry-button {
-  margin-top: 6px;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
-.doctor-retry-button:disabled {
-  cursor: wait;
-}
-
 .form-field textarea + small {
   color: var(--muted);
 }

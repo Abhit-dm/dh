@@ -4,7 +4,7 @@ import CallToAction from '../components/CallToAction.jsx';
 import usePublicDoctors from '../hooks/usePublicDoctors.js';
 
 export default function Doctors() {
-  const { doctors, error, isLoading } = usePublicDoctors();
+  const { doctors, isLoading } = usePublicDoctors();
   return (
     <>
       <main>
@@ -28,7 +28,6 @@ export default function Doctors() {
               ))}
             </div>
             {isLoading && <p className="doctor-photo-note" role="status">Loading doctor profiles…</p>}
-            {error && <p className="doctor-photo-note" role="status">{error}</p>}
             {!isLoading && !doctors.some((doctor) => doctor.imageUrl || doctor.image) && (
               <p className="doctor-photo-note">
                 Doctor photographs display when available in their existing profiles.
