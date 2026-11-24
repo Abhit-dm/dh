@@ -37,7 +37,7 @@ export async function getPublicResource(request: NextRequest, resource: string) 
 
   if (resource === 'website-settings') {
     const data = await prisma.websiteSetting.findMany({
-      where: { isPublic: true },
+      where: { isPublic: true, key: { not: 'contact.additionalPhones' } },
       select: { key: true, value: true },
       orderBy: { key: 'asc' },
     });

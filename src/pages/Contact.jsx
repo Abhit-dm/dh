@@ -6,6 +6,8 @@ import AppointmentForm from '../components/AppointmentForm.jsx';
 import ContactMessageForm from '../components/ContactMessageForm.jsx';
 import { getSpecializationSlug } from '../data/specializations.js';
 
+const contactPagePhone = '9908533667';
+
 export default function Contact() {
   const { contact } = useHospitalSettings();
   const [searchParams] = useSearchParams();
@@ -43,7 +45,7 @@ export default function Contact() {
               <article className="contact-card">
                 <span className="contact-card-icon"><Phone size={22} /></span>
                 <h2>Call us</h2>
-                <a href={`tel:${contact.phoneLink}`}>{contact.phone}</a>
+                <a href={`tel:${contactPagePhone}`}>{contactPagePhone}</a>
               </article>
               <article className="contact-card">
                 <span className="contact-card-icon"><Mail size={22} /></span>
@@ -74,7 +76,7 @@ export default function Contact() {
               <div className="appointment-direct">
                 <Phone size={18} />
                 <span>Prefer to call?</span>
-                <a href={`tel:${contact.phoneLink}`}>{contact.phone}</a>
+                <a href={`tel:${contactPagePhone}`}>{contactPagePhone}</a>
               </div>
             </div>
             <AppointmentForm

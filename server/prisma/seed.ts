@@ -383,7 +383,7 @@ async function seed() {
     }
   }
   await prisma.websiteSetting.deleteMany({
-    where: { key: { in: ['contact.landline', 'contact.emergency'] } },
+    where: { key: { in: ['contact.landline', 'contact.emergency', 'contact.additionalPhones'] } },
   });
 }
 
