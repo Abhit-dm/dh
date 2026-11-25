@@ -55,6 +55,26 @@ button {
 img {
   display: block;
   max-width: 100%;
+  background: linear-gradient(135deg, #f3edf6, #fff7ef);
+}
+
+.doctor-photo-unavailable,
+.doctor-profile-photo-unavailable {
+  align-content: center;
+  align-items: center;
+  justify-items: center;
+  text-align: center;
+  background: linear-gradient(135deg, #f2ebf5, #fff2e8);
+  color: var(--primary-purple);
+}
+
+.doctor-photo-unavailable span,
+.doctor-profile-photo-unavailable span {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 h1,
@@ -759,6 +779,17 @@ textarea:focus-visible {
   font-size: 1.04rem;
 }
 
+.doctor-name-highlight {
+  display: inline;
+  color: var(--primary-purple);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  border-radius: 3px;
+  background: linear-gradient(transparent 68%, rgba(255, 109, 0, 0.18) 68%);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 .doctor-card-copy p {
   margin-bottom: 5px;
   font-size: 0.83rem;
@@ -1066,6 +1097,14 @@ textarea:focus-visible {
   font-size: 1.1rem;
 }
 
+.family-care-image {
+  width: 100%;
+  height: 180px;
+  margin-bottom: 16px;
+  object-fit: cover;
+  background: var(--tint);
+}
+
 .family-care-card p {
   flex: 1;
   margin-bottom: 18px;
@@ -1082,6 +1121,14 @@ textarea:focus-visible {
   margin-inline: auto;
   padding: 28px;
   background: var(--white);
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin-inline: auto;
 }
 
 .testimonial-placeholder > p {
@@ -1206,6 +1253,10 @@ textarea:focus-visible {
   gap: 20px;
 }
 
+.accommodation-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .care-option-card {
   min-height: 225px;
   border: 1px solid var(--line);
@@ -1238,6 +1289,21 @@ textarea:focus-visible {
 
 .care-option-card p {
   font-size: 0.85rem;
+}
+
+.care-option-card img,
+.dental-service-image,
+.care-option-image {
+  width: 100%;
+  height: 170px;
+  margin-bottom: 16px;
+  border-radius: 2px;
+  object-fit: cover;
+  background: var(--tint);
+}
+
+.facility-card img {
+  height: 190px;
 }
 
 .service-related,
@@ -1520,6 +1586,10 @@ textarea:focus-visible {
   display: block;
   color: var(--primary-purple);
   font-weight: 600;
+}
+
+.contact-card a:not(.text-link) + a:not(.text-link) {
+  margin-top: 9px;
 }
 
 .contact-card .text-link {
@@ -1840,7 +1910,8 @@ textarea:focus-visible {
   margin-top: 17px;
 }
 
-.footer-social-links a {
+.footer-social-links a,
+.footer-social-links > span {
   display: grid;
   width: 35px;
   height: 35px;
@@ -1848,6 +1919,11 @@ textarea:focus-visible {
   border: 1px solid rgba(255, 255, 255, 0.24);
   color: #ffc08e;
   transition: border-color 150ms ease, background 150ms ease;
+}
+
+.footer-social-links > span {
+  cursor: not-allowed;
+  opacity: 0.65;
 }
 
 .footer-social-links a:hover {
@@ -1919,6 +1995,10 @@ textarea:focus-visible {
   color: rgba(255, 255, 255, 0.76);
 }
 
+.footer-attribution a {
+  color: inherit;
+}
+
 @keyframes rise-in {
   from {
     transform: translateY(14px);
@@ -1967,6 +2047,10 @@ textarea:focus-visible {
 
   .service-grid-three {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .accommodation-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .contact-card-grid {
@@ -2209,6 +2293,7 @@ textarea:focus-visible {
   .about-service-grid,
   .family-care-grid,
   .care-option-grid,
+  .testimonial-grid,
   .doctor-grid {
     grid-template-columns: 1fr;
   }
@@ -2961,43 +3046,6 @@ textarea:focus-visible {
   color: var(--primary-purple);
 }
 
-.home-contact-strip {
-  padding-block: 75px;
-  background: var(--primary-purple);
-}
-
-.home-contact-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-}
-
-.home-contact-inner h2 {
-  max-width: 640px;
-  margin-bottom: 12px;
-  color: var(--white);
-  font-size: clamp(2.2rem, 4.8vw, 3.8rem);
-}
-
-.home-contact-inner > div:first-child > p {
-  max-width: 640px;
-  color: rgba(255, 255, 255, 0.77);
-  font-size: 0.85rem;
-}
-
-.home-contact-actions {
-  display: flex;
-  flex: 0 0 auto;
-  color: var(--primary-purple);
-  flex-direction: column;
-  gap: 12px;
-}
-
-.home-contact-actions .button {
-  white-space: nowrap;
-}
-
 .blog-section {
   background: var(--white);
 }
@@ -3473,20 +3521,6 @@ textarea:focus-visible {
     min-height: 205px;
   }
 
-  .home-contact-inner {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .home-contact-actions {
-    width: 100%;
-  }
-
-  .home-contact-actions .button {
-    width: 100%;
-  }
-
   .blog-image {
     height: 225px;
   }
@@ -3605,6 +3639,35 @@ textarea:focus-visible {
   animation: section-reveal-in 620ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
+.department-care-page > .page-intro .page-intro-image {
+  animation: department-image-enter 760ms cubic-bezier(0.2, 0.7, 0.2, 1) 100ms both;
+}
+
+.department-care-page > .service-detail-intro .service-detail-layout,
+.department-care-page > .dental-intro .dental-intro-inner {
+  animation: department-content-enter 700ms cubic-bezier(0.2, 0.7, 0.2, 1) 180ms both;
+}
+
+.cursor-motion-page img,
+.cursor-motion-page .service-image-link,
+.cursor-motion-page .care-mascot-stage {
+  transition: transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.cursor-motion-page .service-image-link img {
+  transition: transform 500ms ease;
+}
+
+.cursor-motion-page [data-pointer-motion] {
+  transform:
+    perspective(900px)
+    translate3d(var(--pointer-shift-x, 0px), var(--pointer-shift-y, 0px), 0)
+    rotateX(var(--pointer-rotate-x, 0deg))
+    rotateY(var(--pointer-rotate-y, 0deg));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
 @keyframes page-transition-in {
   from {
     transform: translateY(8px);
@@ -3638,6 +3701,28 @@ textarea:focus-visible {
   }
 }
 
+@keyframes department-image-enter {
+  from {
+    transform: translateX(24px) scale(0.98);
+    opacity: 0.35;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes department-content-enter {
+  from {
+    transform: translateY(22px);
+    opacity: 0.4;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
     .hero-image {
@@ -3657,8 +3742,14 @@ textarea:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .page-transition,
   .scroll-revealed,
-  .page-intro-copy > * {
+  .page-intro-copy > *,
+  .department-care-page > .page-intro .page-intro-image,
+  .department-care-page > .service-detail-intro .service-detail-layout,
+  .department-care-page > .dental-intro .dental-intro-inner,
+  .cursor-motion-page [data-pointer-motion] {
     animation: none !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
 

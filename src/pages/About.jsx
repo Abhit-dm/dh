@@ -39,22 +39,25 @@ export default function About() {
           <div className="container about-story-layout">
             <div>
               <span className="eyebrow">Our hospital</span>
-              <h2>Complete care for your family.</h2>
-              <blockquote className="about-family-quote">
-                “Complete care for your family from newborn to elderly”
-              </blockquote>
+              <h2>Welcome to DH Hospitals</h2>
             </div>
             <div className="about-story-copy">
               <p>
-                DH Hospitals serves families in Poranki, Vijayawada, with
-                published information about its departments and services.
+                Welcome to DH Hospitals, established in 2019 by <span className="doctor-name-highlight">Dr. Dinesh Davuluru</span>
+                {' '}and <span className="doctor-name-highlight">Dr. Haasitha Chigurupati</span>.
+                {' '}Our team also includes <span className="doctor-name-highlight">Dr. Sai Harshitha Sunkavally</span>,
+                our Dental Surgeon.
               </p>
               <p>
-                The hospital’s published pediatric services cater to newborns,
-                infants, and adolescents up to 18 years old. Its website also
-                describes experienced pediatricians and emergency pediatric
-                care support.
+                Our mission is to provide quality healthcare with compassion, honesty,
+                and affordability under one roof. We believe healthcare is about caring
+                for people, supporting families, and building lifelong trust.
               </p>
+              <p>
+                At DH Hospitals, we offer comprehensive healthcare services for children,
+                adults, and senior citizens through our specialized departments and visiting consultants.
+              </p>
+              <p>At DH Hospitals, your family&apos;s health, comfort, and well-being always come first.</p>
               <Link className="text-link" to="/contact">
                 Contact DH Hospitals <span aria-hidden="true">↗</span>
               </Link>

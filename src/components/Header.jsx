@@ -10,8 +10,7 @@ const navigation = [
   { label: 'Child Care', to: '/child-care' },
   { label: 'Eye Care', to: '/eye-care' },
   { label: 'Dental Care', to: '/dental-care' },
-  { label: 'Family Health Care', to: '/family-healthcare' },
-  { label: 'Our Services', services: true },
+  { label: 'Family Healthcare', to: '/family-healthcare' },
   { label: 'Testimonials', to: '/testimonials' },
   { label: 'Contact', to: '/contact' },
 ];
@@ -62,9 +61,11 @@ export default function Header() {
     <>
       <div className="contact-bar">
         <div className="container contact-bar-inner">
-          <a href={`tel:${contact.phoneLink}`}>
-            <Phone size={14} aria-hidden="true" /> {contact.phone}
-          </a>
+          {contact.phoneNumbers.map(({ number, phoneLink }) => (
+            <a key={phoneLink} href={`tel:${phoneLink}`}>
+              <Phone size={14} aria-hidden="true" /> {number}
+            </a>
+          ))}
           <a className="contact-bar-email" href={`mailto:${contact.email}`}>
             <Mail size={14} aria-hidden="true" /> {contact.email}
           </a>

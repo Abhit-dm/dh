@@ -87,21 +87,24 @@ const departments = [
 
 const hospitalDoctors = [
   {
-    name: 'DR.DINESH DAVULURU',
-    qualifications: 'MBBS, DCH, DNB, PGPN (Boston, USA)',
-    specialty: 'Pediatrician & Neonatologist.',
+    name: 'DR. DINESH DAVULURU',
+    qualifications: 'MBBS, DCH, DNB, PGPN (Boston)',
+    specialty: 'Consultant Pediatrician & Neonatologist',
+    bio: '14+ Years Experience',
     slug: 'child-care',
   },
   {
-    name: 'DR.HAASITHA CHIGURUPATI',
-    qualifications: 'MBBS, MS OPHTHAL',
-    specialty: 'Ophthalmologist.',
+    name: 'DR. HAASITHA CHIGURUPATI',
+    qualifications: 'MBBS, MS Ophthalmology',
+    specialty: 'Consultant Ophthalmologist & Cataract Surgeon',
+    bio: '13+ Years Experience',
     slug: 'eye-care',
   },
   {
     name: 'DR. SAI HARSHITHA SUNKAVALLY',
-    qualifications: 'BDS - Dental Surgeon.',
-    specialty: 'Dental Surgeon.',
+    qualifications: 'BDS',
+    specialty: 'Dental Surgeon',
+    bio: '5+ Years Experience',
     slug: 'dental-care',
   },
 ];
@@ -228,6 +231,14 @@ const websiteSettings = [
       { days: 'Sunday', time: '09:00 - 01:00' },
     ],
   },
+  {
+    key: 'social.links',
+    value: [
+      { label: 'Facebook', url: 'https://www.facebook.com/Dhclinic28' },
+      { label: 'Instagram', url: 'https://www.instagram.com/dhhospitals/' },
+      { label: 'YouTube', url: 'https://www.youtube.com/@DHHospitals/' },
+    ],
+  },
 ];
 
 async function seed() {
@@ -284,15 +295,36 @@ async function seed() {
   for (const doctor of hospitalDoctors) {
     const departmentId = departmentsBySlug.get(doctor.slug);
     if (!departmentId) throw new Error(`Missing department ${doctor.slug}.`);
+    const legacyName = doctor.slug === 'child-care'
+      ? 'DR.DINESH DAVULURU'
+      : doctor.slug === 'eye-care'
+        ? 'DR.HAASITHA CHIGURUPATI'
+        : null;
+    if (legacyName) {
+      const legacy = await prisma.doctor.findUnique({
+        where: { name_departmentId: { name: legacyName, departmentId } },
+      });
+      if (legacy) {
+        await prisma.doctor.update({
+          where: { id: legacy.id },
+          data: { name: doctor.name },
+        });
+      }
+    }
     await prisma.doctor.upsert({
       where: {
         name_departmentId: { name: doctor.name, departmentId },
       },
-      update: {},
+      update: {
+        qualifications: doctor.qualifications,
+        specialty: doctor.specialty,
+        bio: doctor.bio,
+      },
       create: {
         name: doctor.name,
         qualifications: doctor.qualifications,
         specialty: doctor.specialty,
+        bio: doctor.bio,
         departmentId,
       },
     });

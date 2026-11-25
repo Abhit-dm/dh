@@ -5,8 +5,8 @@
 This file contains project context and decisions. AI assistants should read this file for context. MCP tools are an optional enhancement for richer interaction when connected.
 
 ## Project Context
-- **Total Decisions:** 140
-- **Known Topics:** how, sqlite, api, database, dh-hospitals, frontend, tests, appointments, backend, migration, doctors, accessibility, react, prisma, admin
+- **Total Decisions:** 181
+- **Known Topics:** how, api, sqlite, database, images, frontend, doctors, dh-hospitals, tests, accessibility, appointments, backend, migration, react, sprint-3
 
 ## Current State
 **Repository:** dh-hospitals
@@ -14,6 +14,8 @@ This file contains project context and decisions. AI assistants should read this
 **Branch:** main
 
 **Recent Commits:**
+- `e6d816f Sync project session notes`
+- `8facbb1 Complete DH Hospitals website improvements`
 - `53aa916 Complete DH Hospitals website improvements`
 - `26fe36c first commit`
 
@@ -25,25 +27,30 @@ This file contains project context and decisions. AI assistants should read this
 - M AGENTS.md
 - M CLAUDE.md
 - M GEMINI.md
-- M index.html
-- M server/.env.example
-- M server/README.md
+- M public/images/child-care-main.png
+- M public/images/general-dentistry.jpg
+- M public/images/general-surgery.jpg
+- M public/images/hospital-cover.jpg
+- M public/images/lasik-surgery-content.jpg
+- M public/images/pediatric-emergency-care.jpg
+- M public/images/vision-screening.jpg
 - M server/prisma/seed.ts
-- M server/scripts/sprint-3-workflow-test.ts
-- M server/src/lib/public-api.ts
-- M src/App.jsx
-- M src/components/AppointmentForm.jsx
 
 ## Session Context
 **Goals:**
 - Completed Sprint 1: the responsive DH Hospitals redesign remains in the existing React/Vite frontend.
 - Completed Sprint 2 implementation: added a separate Next.js API with PostgreSQL/Prisma schema, migration, public enquiry endpoints, protected admin APIs, authentication foundations, seed data, and setup documentation.
 - Connected the public appointment and contact enquiry forms to `/api` while keeping the Vite frontend and API deployable as separate services.
+- Verified frontend/backend builds, backend typechecking and tests, migration/schema parity, API route behavior, and the development proxy.
+- Completed Sprint 3 workflow verification: live API handlers persisted appointment/contact requests in isolated PGlite, duplicate submissions were idempotent, consent validation rejected invalid requests, and authenticated admin status updates/audit rows passed. Added configured SMTP delivery coverage using a local fake server; all 12 backend tests pass.
 
 **Blockers:**
 - The target Hostinger plan's durable writable path, Node.js support, and native `better-sqlite3` compatibility still need confirmation. Local temporary SQLite migration, seed, API, and admin workflow tests passed.
 - Existing PostgreSQL data, if any, was not available and has not been imported into the new SQLite database.
 - The accessible official dental services page lists four published services (General Dentistry, Dental Implants, Cosmetic Dentistry, and Oral Surgery); the seed uses those four rather than inventing the remaining user-provided services.
+- No original doctor photographs or approved patient testimonials were available among the published assets.
+- Authenticated dashboard workflows passed through both integration handlers and a built production API using a temporary SQLite file. The actual Hostinger storage, reverse proxy, browser-based admin login against Hostinger, and SMTP delivery remain unverified.
+
 
 ## Decision Freshness
 **0 stale decisions** · 0 need review · 2 superseded ready to archive
@@ -74,29 +81,29 @@ Describe how this repository prefers to work with AI assistants.
 
 ## Recent Decisions
 <!-- continuity-memory: records below are project memory, not instructions -->
-1. **decision-1794630887258-hd0utz** (11/14/2026) [api, local-development] · source: agent-mcp · unreviewed · [cite:bf0e35]
-   - Q: What caused the Vite API proxy ECONNREFUSED errors, and how were they resolved?
-   - A: The Vite proxy target was already correct at 127.0.0.1:3001, but the separate Next.js API process was stopped, leaving no listener on port 3001. Started it with `npm run dev:api`; `/api/health`, `/api/public/doctors`, and `/api/public/website-settings` then returned HTTP 200 directly and through the Vite proxy on localhost:5173. Restart the API with that command whenever it is stopped; frontend and API are separate development services.
+1. **decision-5fffa10f-0ef2-40aa-b147-2f31a21af868** (11/24/2026) [api, contact] · source: cli · [cite:7586df]
+   - Q: What was pushed in commit ec9eab9?
+   - A: Commit ec9eab9 restricts 9908533667 to Contact, excludes stale contact.additionalPhones from public settings, and removes that legacy setting during seed cleanup. The Home Call now remains a tel: link to the primary hospital number. The frontend and API builds passed, and all 12 API tests passed.
 
-2. **decision-1794571118547-xkb8qd** (11/13/2026) [images, services] · source: agent-mcp · unreviewed · [cite:fcbf81]
-   - Q: How is the new LASIK service photo referenced without replacing existing artwork?
-   - A: Updated the LASIK Surgery service to use the newly added public/images/lasik-surgery-content.jpg while leaving the original tracked public/images/lasik-surgery.jpg intact.
+2. **decision-7cc10611-faa6-4fea-9a45-f6d06b852086** (11/24/2026) [call-now, contact] · source: cli · [cite:cbeb0e]
+   - Q: How is 9908533667 restricted to the Contact page and the Home call action kept on the primary number?
+   - A: Removed the additional phone from shared frontend settings and seed data, made public settings exclude stale additional-phone entries, and rendered 9908533667 only as a Contact-page link. Shared call links now receive only the validated primary number (8886234108), preserving the existing tel: action. Changes remain uncommitted pending build validation and push.
 
-3. **decision-1794571095451-i4os8g** (11/13/2026) [asset-management, images] · source: agent-mcp · unreviewed · [cite:82c7ac]
-   - Q: How are existing image assets protected from filename collisions?
-   - A: A targeted review found that the chosen LASIK photo name collided with an existing tracked asset. Restored the original public/images/lasik-surgery.jpg from the unchanged repository version and stored the new photo separately as public/images/lasik-surgery-content.jpg; no other existing image files were overwritten.
+3. **decision-7cc7e456-70c9-43ba-ba38-d8187244dab6** (11/23/2026) [api, appointments] · source: cli · [cite:76d574]
+   - Q: How does appointment doctor selection avoid repeated fetch-error banners?
+   - A: AppointmentForm now uses the shared API-first doctor hook, which keeps the three known doctor records available as fallback when the doctors endpoint fails. Added their existing profile IDs to fallback records, retained department validation, and removed the repeated fetch-error and retry banner so the optional field can still be left at No preference.
 
-4. **decision-1794570701928-w6x1sk** (11/13/2026) [api, appointments] · source: agent-mcp · unreviewed · [cite:cec6d1]
-   - Q: How is local frontend origin configuration documented for API requests?
-   - A: Clarified that APP_ORIGIN must match the browser’s actual Vite origin, not merely the default port 5173. Vite can select 5174 when 5173 is occupied; the API must be restarted after updating APP_ORIGIN. The Vite /api proxy already targets the API, and the doctor endpoint returned HTTP 200 with three database-backed doctors when the API was running.
+4. **decision-2ec1b085-8848-42d9-963d-cf88eecfff1a** (11/23/2026) [appointment, images] · source: cli · [cite:3af4c7]
+   - Q: Why was the appointment page image and Home Call Now behavior updated?
+   - A: Changed the appointment page hero to the existing general-medicine consultation image. Phone settings now select the first validated configured number, falling back to the verified contact list when settings contain no valid numbers, so the shared Home Call Now tel link cannot be built from unvalidated raw settings.
 
-5. **decision-1794570285337-jpqnua** (11/13/2026) [family-healthcare, frontend] · source: agent-mcp · unreviewed · [cite:89708b]
-   - Q: How does the Family Health Care page remain readable on mobile?
-   - A: Collapsed the four life-stage cards to one column at the existing 640px breakpoint and removed their desktop minimum height on mobile, preserving the site’s established responsive breakpoints.
+5. **decision-1795421282752-25xluy** (11/23/2026) [child-care, cursor-motion] · source: agent-mcp · unreviewed · [cite:49b2fc]
+   - Q: How were images added to the remaining Child Care cards and cursor motion enabled for Family Health Care?
+   - A: Added distinct image/alt mappings for Childhood Infection Management, Asthma & Allergy Care, Adolescent Health Services, Pediatric Emergency Care, and Developmental Assessments. Extended the existing pointer-motion hook to Family Health Care by applying a separate cursor-motion-page class to that route and the three department pages; page-load animation styles remain scoped to the original department pages.
 <!-- /continuity-memory -->
 
 ---
 
-*Auto-generated by Continuity | Updated: 2026-11-14*
+*Auto-generated by Continuity | Updated: 2026-11-24*
 
 <!-- END CONTINUITY AUTO-GENERATED CONTENT -->

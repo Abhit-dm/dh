@@ -17,6 +17,7 @@ const publicDoctorSelect = {
   name: true,
   qualifications: true,
   specialty: true,
+  bio: true,
   imageUrl: true,
   department: { select: { id: true, name: true, slug: true } },
 } satisfies Prisma.DoctorSelect;

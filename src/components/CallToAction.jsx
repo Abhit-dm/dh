@@ -2,7 +2,10 @@ import { ArrowUpRight, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useHospitalSettings from '../hooks/useHospitalSettings.jsx';
 
-export default function CallToAction({ eyebrow = 'We are here to help' }) {
+export default function CallToAction({
+  eyebrow = 'We are here to help',
+  showPhone = true,
+}) {
   const { contact } = useHospitalSettings();
   return (
     <section className="cta-section">
@@ -16,9 +19,11 @@ export default function CallToAction({ eyebrow = 'We are here to help' }) {
           <Link className="button button-light" to="/appointment">
             Book Appointment <ArrowUpRight size={17} aria-hidden="true" />
           </Link>
-          <a className="cta-phone" href={`tel:${contact.phoneLink}`}>
-            <Phone size={17} aria-hidden="true" /> {contact.phone}
-          </a>
+          {showPhone && contact.phoneNumbers.map(({ number, phoneLink }) => (
+            <a className="cta-phone" key={phoneLink} href={`tel:${phoneLink}`}>
+              <Phone size={17} aria-hidden="true" /> {number}
+            </a>
+          ))}
         </div>
       </div>
     </section>

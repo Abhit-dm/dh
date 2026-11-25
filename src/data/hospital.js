@@ -12,27 +12,34 @@ export const contact = {
 export const socialLinks = [
   { label: 'Facebook', url: 'https://www.facebook.com/Dhclinic28' },
   { label: 'Instagram', url: 'https://www.instagram.com/dhhospitals/' },
+  { label: 'YouTube', url: 'https://www.youtube.com/@DHHospitals/' },
 ];
 
 export const doctors = [
   {
-    name: 'DR.DINESH DAVULURU',
-    qualifications: 'MBBS, DCH, DNB, PGPN (Boston, USA)',
-    specialty: 'Pediatrician & Neonatologist.',
+    id: '57c70357-6ec3-4255-9d0d-30f2101fb97a',
+    name: 'DR. DINESH DAVULURU',
+    qualifications: 'MBBS, DCH, DNB, PGPN (Boston)',
+    specialty: 'Consultant Pediatrician & Neonatologist',
+    experience: '14+ Years Experience',
     department: 'Child Care',
     image: null,
   },
   {
-    name: 'DR.HAASITHA CHIGURUPATI',
-    qualifications: 'MBBS, MS OPHTHAL',
-    specialty: 'Ophthalmologist.',
+    id: 'ae9fdf41-f43d-4b6f-a2d4-fb5b86a8668f',
+    name: 'DR. HAASITHA CHIGURUPATI',
+    qualifications: 'MBBS, MS Ophthalmology',
+    specialty: 'Consultant Ophthalmologist & Cataract Surgeon',
+    experience: '13+ Years Experience',
     department: 'Eye Care',
     image: null,
   },
   {
+    id: 'b5a70390-baab-4ad3-80ea-e604f6e628fc',
     name: 'DR. SAI HARSHITHA SUNKAVALLY',
-    qualifications: 'BDS - Dental Surgeon.',
-    specialty: 'Dental Surgeon.',
+    qualifications: 'BDS',
+    specialty: 'Dental Surgeon',
+    experience: '5+ Years Experience',
     department: 'Dental Care',
     image: null,
   },
@@ -49,7 +56,7 @@ export function getDoctorDepartmentName(doctor) {
   return department?.name || '';
 }
 
-export const CHILD_CARE_MAIN_IMAGE = '/images/child-care-main.png';
+export const CHILD_CARE_MAIN_IMAGE = '/images/child-care-main.webp';
 
 export const childServices = [
   {
@@ -79,43 +86,76 @@ export const childServices = [
 
 export const eyeServices = [
   {
-    title: 'Vision Screening',
-    description:
-      'Ensure early detection of vision problems with comprehensive screening services at DH Hospitals.',
+    title: 'Comprehensive Eye Examinations',
+    description: 'Detailed eye examinations for ongoing vision health.',
+    image: '/images/eye-refraction.jpg',
+    imageAlt: 'An adult patient receiving a comprehensive eye examination with a phoropter.',
+  },
+  {
+    title: 'Pediatric Eye Care',
+    description: 'Eye care support for children.',
+    image: '/images/pediatric-eye-care.jpg',
+    imageAlt: 'Illustrative photo of a child trying on eyeglasses during an optical fitting.',
+  },
+  {
+    title: 'Vision Testing & Refraction',
+    description: 'Testing and refraction for accurate vision assessment.',
     image: '/images/vision-screening.webp',
+    imageAlt: 'A child receiving a vision screening with ophthalmic equipment.',
   },
   {
-    title: 'Cataract Surgery',
-    description:
-      'Experience advanced cataract surgery procedures with state-of-the-art technology at DH Hospitals.',
+    title: 'Cataract Evaluation & Cataract Surgery',
+    description: 'Cataract evaluation and surgical care.',
     image: '/images/cataract-services.webp',
+    imageAlt: 'An ophthalmologist performing cataract surgery.',
   },
   {
-    title: 'LASIK Surgery',
-    description:
-      'DH Hospitals offer LASIK surgery to correct common vision problems and reduce dependence on glasses or contacts.',
-    image: '/images/lasik-surgery-content.jpg',
-    imageAlt: 'Eye surgery performed using a precision surgical instrument.',
-  },
-  {
-    title: 'Glaucoma & Optic Nerve Care',
-    description:
-      'DH Hospitals lists glaucoma and optic nerve care information.',
+    title: 'Glaucoma Screening & Management',
+    description: 'Glaucoma screening and management.',
     image: '/images/glaucoma-tonometry.jpg',
-    imageAlt: 'A clinician measuring a patient’s eye pressure during an eye exam.',
+    imageAlt: 'An eye pressure measurement during glaucoma screening.',
   },
   {
-    title: 'Laser Procedures',
-    description:
-      'Laser procedures are among the eye-care services listed by DH Hospitals.',
+    title: 'Diabetic Retinopathy Screening',
+    description: 'Retinal screening for people with diabetes.',
+    image: '/images/diabetic-retinopathy.jpg',
+    imageAlt: 'A retinal scan used for diabetic retinopathy screening.',
+  },
+  {
+    title: 'LASIK & Refractive Surgery',
+    description: 'LASIK and refractive surgery consultations and care.',
+    image: '/images/lasik-surgery-content.jpg',
+    imageAlt: 'An ophthalmic laser procedure.',
+  },
+  {
+    title: 'Pterygium Surgery',
+    description: 'Surgical care for pterygium.',
     image: '/images/laser-procedures.jpg',
-    imageAlt: 'An ophthalmic laser procedure being performed by a surgeon.',
+    imageAlt: 'An eye surgeon using an operating microscope.',
   },
   {
-    title: 'Optics & Contact Lenses',
-    description:
-      'Expert consultations for optics and contact lenses.',
-    image: '/images/hospital-cover.webp',
+    title: 'Dry Eye Evaluation & Treatment',
+    description: 'Evaluation and treatment for dry-eye symptoms.',
+    image: '/images/dry-eye-treatment.jpg',
+    imageAlt: 'Eye drops being applied during eye care.',
+  },
+  {
+    title: 'Computer Vision Syndrome Management',
+    description: 'Management of eye strain related to screen use.',
+    image: '/images/computer-eye-strain.jpg',
+    imageAlt: 'A person experiencing eye strain while using a laptop.',
+  },
+  {
+    title: 'Eye Allergy & Infection Treatment',
+    description: 'Care for eye allergies and infections.',
+    image: '/images/eye-allergy-infection.jpg',
+    imageAlt: 'Eye care for irritation and infection.',
+  },
+  {
+    title: 'Retinal Screening & Evaluation',
+    description: 'Retinal screening and evaluation.',
+    image: '/images/retinal-screening.jpg',
+    imageAlt: 'A young patient having an eye examination with optical equipment.',
   },
 ];
 
@@ -124,7 +164,8 @@ export const dentalServices = [
     title: 'General Dentistry',
     description:
       'Comprehensive oral exams, cleaning, and preventive care to maintain healthy teeth and gums for the whole family.',
-    image: '/images/general-dentistry.webp',
+    image: '/images/dental-checkup.jpg',
+    imageAlt: 'A dentist examining a patient’s teeth.',
   },
   {
     title: 'Orthodontic Treatment',
@@ -137,31 +178,36 @@ export const dentalServices = [
     title: 'Root Canal Therapy',
     description:
       'Advanced pain-free root canal treatments using modern technology to save and restore damaged teeth.',
-    image: '/images/oral-surgery.webp',
+    image: '/images/dental-crown.jpg',
+    imageAlt: 'A dental crown used to restore a tooth.',
   },
   {
     title: 'Dental Implants',
     description:
       'Permanent and natural-looking solutions for missing teeth with advanced dental implant procedures.',
     image: '/images/dental-implants.webp',
+    imageAlt: 'A dental implant restoration.',
   },
   {
     title: 'Cosmetic Dentistry',
     description:
       'Smile makeovers, teeth whitening, veneers, and cosmetic corrections to enhance your appearance and confidence.',
     image: '/images/cosmetic-dentistry.webp',
+    imageAlt: 'Cosmetic dental treatment.',
   },
   {
     title: 'Pediatric Dentistry',
     description:
       'Gentle and friendly dental care designed specifically for children, ensuring lifelong oral health habits.',
-    image: '/images/general-dentistry.webp',
+    image: '/images/pediatric-dentistry.jpg',
+    imageAlt: 'A child receiving dental care.',
   },
   {
     title: 'Oral Surgery',
     description:
       'Expert surgical solutions for wisdom teeth removal, jaw alignment, and other oral surgical procedures.',
     image: '/images/oral-surgery.webp',
+    imageAlt: 'Oral surgery performed by a dental clinician.',
   },
 ];
 
@@ -172,13 +218,13 @@ export const galleryImages = [
     caption: 'DH Hospitals',
   },
   {
-    src: '/images/index-about.webp',
-    alt: 'DH Hospitals care',
+    src: '/images/child-health-support.jpg',
+    alt: 'A clinician measuring a young child during a pediatric checkup.',
     caption: 'Children’s care',
   },
   {
-    src: '/images/index-about-2.webp',
-    alt: 'DH Hospitals healthcare services',
+    src: '/images/general-medicine.jpg',
+    alt: 'A physician checking an adult patient’s blood pressure.',
     caption: 'Healthcare services',
   },
   {

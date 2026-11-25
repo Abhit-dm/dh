@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { ArrowUpRight, CheckCircle2 } from 'lucide-react';
 import usePublicDepartments from '../hooks/usePublicDepartments.js';
+import usePublicDoctors from '../hooks/usePublicDoctors.js';
 import { getSpecializationSlug } from '../data/specializations.js';
 import { formatDoctorName } from '../data/hospital.js';
 import { readApiResponse } from '../lib/readApiResponse.js';
@@ -57,47 +58,13 @@ export default function AppointmentForm({ initialDepartment = '' }) {
     ...initialForm,
     department: getSpecializationSlug(initialDepartment),
   }));
+  const { doctors, isLoading: isLoadingDoctors } = usePublicDoctors(form.department);
   const [errors, setErrors] = useState({});
   const [submission, setSubmission] = useState(null);
   const [submitError, setSubmitError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [doctors, setDoctors] = useState([]);
-  const [doctorLoadError, setDoctorLoadError] = useState('');
-  const [isLoadingDoctors, setIsLoadingDoctors] = useState(false);
   const submissionInProgress = useRef(false);
   const today = todayInIndia();
-
-  useEffect(() => {
-    const controller = new AbortController();
-    setDoctors([]);
-    setDoctorLoadError('');
-    setIsLoadingDoctors(true);
-    const departmentFilter = form.department
-      ? `?department=${encodeURIComponent(form.department)}`
-      : '';
-    fetch(`/api/public/doctors${departmentFilter}`, { signal: controller.signal })
-      .then((response) => readApiResponse(response, 'Preferred doctors'))
-      .then((result) => {
-        if (!Array.isArray(result.data)) {
-          throw new Error('The doctor list could not be read. Please try again later.');
-        }
-        setDoctors(result.data);
-      })
-      .catch((error) => {
-        if (error.name !== 'AbortError') {
-          setDoctorLoadError(
-            error instanceof Error
-              ? `Preferred doctors could not be loaded: ${error.message}`
-              : 'Preferred doctors could not be loaded. Please try again later.',
-          );
-        }
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setIsLoadingDoctors(false);
-      });
-
-    return () => controller.abort();
-  }, [form.department]);
 
   function updateField(event) {
     const { name, value, type, checked } = event.target;
@@ -130,7 +97,8 @@ export default function AppointmentForm({ initialDepartment = '' }) {
       form.doctorId &&
       !doctors.some((doctor) =>
         doctor.id === form.doctorId &&
-        (!form.department || doctor.department?.slug === form.department),
+        (!form.department ||
+          getSpecializationSlug(doctor.department?.slug ?? doctor.department) === form.department),
       )
     ) {
       nextErrors.doctorId = 'Select an available doctor for the selected department.';
@@ -175,12 +143,9 @@ export default function AppointmentForm({ initialDepartment = '' }) {
           website: form.website,
         }),
       });
-      const result = await response.json();
-      if (!response.ok) {
-        const validationErrors = mapValidationErrors(result.error?.message || '');
-        setErrors(validationErrors);
-        throw new Error(result.error?.message || 'Your request could not be submitted. Please try again.');
-      }
+      const result = await readApiResponse(response, 'Appointment request');
+      const validationErrors = mapValidationErrors(result.error?.message || '');
+      if (Object.keys(validationErrors).length) setErrors(validationErrors);
       setSubmission(result.data);
       setSubmitError('');
     } catch (error) {
@@ -342,11 +307,9 @@ export default function AppointmentForm({ initialDepartment = '' }) {
             <option value="">
               {isLoadingDoctors
                 ? 'Loading doctors…'
-                : doctorLoadError
-                  ? 'No preference'
-                  : doctors.length
-                    ? 'Select Preferred Doctor'
-                    : 'No doctors available'}
+                : doctors.length
+                  ? 'Select Preferred Doctor'
+                  : 'No preference'}
             </option>
             {doctors.map((doctor) => (
               <option value={doctor.id} key={doctor.id}>
@@ -355,9 +318,6 @@ export default function AppointmentForm({ initialDepartment = '' }) {
             ))}
           </select>
           {errors.doctorId && <small id="error-doctorId">{errors.doctorId}</small>}
-          {!isLoadingDoctors && !doctorLoadError && !doctors.length && (
-            <small>No active doctors are available right now.</small>
-          )}
         </div>
         <label className="form-field form-field-wide">
           <span>Additional message</span>

@@ -6,34 +6,28 @@ import ServiceCard from '../components/ServiceCard.jsx';
 import DoctorCard from '../components/DoctorCard.jsx';
 import CallToAction from '../components/CallToAction.jsx';
 import usePublicDoctors from '../hooks/usePublicDoctors.js';
+import useDepartmentCursorMotion from '../hooks/useDepartmentCursorMotion.js';
 
 const childCareLinks = [
-  {
-    icon: Baby,
-    title: 'Newborns, infants & adolescents',
-    description:
-      'Pediatric services are described for newborns, infants, and adolescents up to 18 years old.',
-  },
-  {
-    icon: HeartHandshake,
-    title: 'Pediatric health services',
-    description:
-      'Care includes support for skin problems, nebulization, and diet feeding counseling.',
-  },
-  {
-    icon: Stethoscope,
-    title: 'Emergency pediatric care support',
-    description:
-      'The hospital describes prompt medical care support and guidance for children’s health needs.',
-  },
+  { icon: Baby, title: 'Newborn Care', description: 'Safe, attentive newborn care.', image: '/images/newborn-care.jpg', imageAlt: 'Illustrative photo of a newborn resting in a hospital crib.' },
+  { icon: HeartHandshake, title: 'Child Health Consultations', description: 'Consultations for children’s health needs.', image: CHILD_CARE_MAIN_IMAGE, imageAlt: 'A pediatrician examining a young child during a consultation.' },
+  { icon: Stethoscope, title: 'Vaccinations & Immunizations', description: 'Recommended immunization care.', image: '/images/pediatric-vaccination.jpg', imageAlt: 'Illustrative photo of a child receiving a vaccination from a healthcare professional.' },
+  { icon: Baby, title: 'Growth & Development Monitoring', description: 'Monitoring of healthy growth and development.', image: '/images/child-health-support.jpg', imageAlt: 'Child growth assessment' },
+  { icon: HeartHandshake, title: 'Nutritional Counselling', description: 'Guidance for children’s nutrition.', image: '/images/family-healthcare.jpg', imageAlt: 'Pediatric nutrition consultation' },
+  { icon: Stethoscope, title: 'Childhood Infection Management', description: 'Assessment and management of childhood infections.', image: '/images/pediatric-infection-care.jpg', imageAlt: 'Illustrative photo of a pediatrician examining a child during a consultation.' },
+  { icon: Baby, title: 'Asthma & Allergy Care', description: 'Care for childhood asthma and allergies.', image: '/images/pediatric-asthma-care.jpg', imageAlt: 'Illustrative photo of a child receiving inhalation therapy.' },
+  { icon: HeartHandshake, title: 'Adolescent Health Services', description: 'Support for adolescent health concerns.', image: '/images/adolescent-health-consultation.jpg', imageAlt: 'Illustrative photo of a teenager discussing health concerns with a doctor.' },
+  { icon: Stethoscope, title: 'Pediatric Emergency Care', description: 'Prompt pediatric emergency care.', image: '/images/pediatric-emergency-care.jpg', imageAlt: 'Pediatric emergency-response training using a child-sized mannequin.' },
+  { icon: Baby, title: 'Developmental Assessments', description: 'Age-appropriate developmental assessments.', image: '/images/pediatric-developmental-play.jpg', imageAlt: 'Illustrative photo of a baby practicing hand-eye coordination with building blocks.' },
 ];
 
 export default function ChildCare() {
   const { doctors } = usePublicDoctors('child-care');
+  const cursorMotionHandlers = useDepartmentCursorMotion();
   const doctor = doctors[0];
   return (
     <>
-      <main>
+      <main className="department-care-page cursor-motion-page" {...cursorMotionHandlers}>
         <PageIntro
           eyebrow="Child Care"
           title="Caring for your child’s health."
@@ -47,23 +41,20 @@ export default function ChildCare() {
         <section className="section service-detail-intro">
           <div className="container service-detail-layout">
             <div className="service-detail-copy">
-              <span className="eyebrow">Our children&apos;s medical services</span>
-              <h2>Comprehensive Pediatric Care</h2>
+              <span className="eyebrow">Led by <span className="doctor-name-highlight">Dr. Dinesh Davuluru</span></span>
               <p>
-                Published information from DH Hospitals describes care for
-                newborns,
-                infants, and adolescents up to 18 years old. From skin problems
-                to nebulization and diet feeding counseling, the hospital
-                describes care for children’s health needs.
+                MBBS, DCH, DNB, PGPN (Boston)<br />
+                Consultant Pediatrician &amp; Neonatologist<br />
+                14+ Years of Clinical Experience
               </p>
               <Link className="button" to="/appointment?department=Child%20Care">
-                Book a child care appointment <span aria-hidden="true">↗</span>
+                Book Child Appointment <span aria-hidden="true">↗</span>
               </Link>
             </div>
             <div className="service-detail-image child-care-detail-image">
               <img
-                src={CHILD_CARE_MAIN_IMAGE}
-                alt="Child Care at DH Hospitals – Doctor caring for a young patient."
+                src="/images/newborn-care.jpg"
+                alt="A newborn receiving care in a hospital nursery."
                 width={1536}
                 height={1024}
                 loading="lazy"
@@ -81,8 +72,9 @@ export default function ChildCare() {
               description="Care and service information described by DH Hospitals."
             />
             <div className="care-option-grid">
-              {childCareLinks.map(({ icon: Icon, title, description }, index) => (
+              {childCareLinks.map(({ icon: Icon, title, description, image, imageAlt }, index) => (
                 <article className="care-option-card" key={title}>
+                  {image && <img className="care-option-image" src={image} alt={imageAlt} loading="lazy" decoding="async" />}
                   <div className="care-option-top">
                     <span className="care-option-icon"><Icon size={24} /></span>
                     <span>0{index + 1}</span>
@@ -110,6 +102,37 @@ export default function ChildCare() {
                 />
               ))}
             </div>
+          </div>
+        </section>
+        <section className="section care-options-section">
+          <div className="container">
+            <SectionHeading
+              eyebrow="Advanced Facilities"
+              title="Critical care support for infants and children."
+            />
+            <div className="care-option-grid">
+              {[
+                ['NICU', 'NICU – Neonatal Intensive Care Unit', 'Specialized care and monitoring facilities for newborn babies who require additional medical attention.', '/images/nicu.jpg', 'NICU neonatal intensive care unit'],
+                ['PICU', 'PICU – Pediatric Intensive Care Unit', 'Specialized intensive care facilities for children who require close medical monitoring and treatment.', '/images/picu.jpg', 'PICU pediatric intensive care unit'],
+                ['CPAP Systems', 'CPAP Systems', 'Respiratory support equipment that helps maintain continuous positive airway pressure.', '/images/cpap-system.jpg', 'CPAP respiratory support system'],
+                ['HFNC', 'HFNC – High-Flow Nasal Cannula', 'A respiratory support system that delivers heated, humidified oxygen at controlled flow rates.', '/images/pediatric-emergency-care.jpg', 'High-flow nasal cannula respiratory support'],
+                ['Phototherapy', 'Phototherapy Units', 'Specialized light-based equipment used for treating neonatal jaundice under medical supervision.', '/images/phototherapy-unit.jpg', 'Neonatal phototherapy unit'],
+                ['Ventilators', 'Neonatal & Pediatric Ventilators', 'Medical respiratory support equipment used for patients who require assisted breathing.', '/images/pediatric-ventilator.jpg', 'Neonatal and pediatric ventilator'],
+                ['Monitoring', 'Multiparameter Monitoring Systems', 'Equipment used to monitor heart rate, oxygen saturation, and other clinical measurements.', '/images/multiparameter-monitor.jpg', 'Multiparameter clinical monitor'],
+                ['Warmers', 'Infant Warmers', 'Specialized equipment designed to help maintain a newborn baby’s body temperature.', '/images/infant-warmer.jpg', 'Newborn infant warmer'],
+              ].map(([key, title, description, image, alt]) => (
+                <article className="care-option-card facility-card" key={key}>
+                  <img src={image} alt={alt} loading="lazy" decoding="async" />
+                  <h3>{title}</h3>
+                  <p>{description}</p>
+                </article>
+              ))}
+            </div>
+            <p style={{ marginTop: '28px' }}>
+              Whether it is a newborn&apos;s first check-up, routine vaccination, or specialized critical care,
+              families can trust our pediatric team to provide expert treatment in a safe, caring,
+              and child-friendly environment.
+            </p>
           </div>
         </section>
         <section className="section specialist-section">

@@ -17,8 +17,8 @@ export default function Appointment() {
         eyebrow="Book Appointment"
         title="Start with an appointment enquiry."
         description="Share your preferred details and contact DH Hospitals about an appointment."
-        image="/images/hospital-cover.webp"
-        imageAlt="A care space at DH Hospitals"
+        image="/images/general-medicine.jpg"
+        imageAlt="A physician checking a patient's blood pressure during a consultation."
       />
       <section className="section appointment-section">
         <div className="container appointment-layout">
@@ -33,7 +33,9 @@ export default function Appointment() {
             <div className="appointment-direct">
               <Phone size={18} aria-hidden="true" />
               <span>Prefer to call?</span>
-              <a href={`tel:${contact.phoneLink}`}>{contact.phone}</a>
+              {contact.phoneNumbers.map(({ number, phoneLink }) => (
+                <a key={phoneLink} href={`tel:${phoneLink}`}>{number}</a>
+              ))}
             </div>
             <Link className="text-link appointment-contact-link" to="/contact">
               Contact details <ArrowUpRight size={15} aria-hidden="true" />

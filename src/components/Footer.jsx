@@ -1,24 +1,19 @@
-import { ArrowUpRight, Facebook, Instagram, MapPin, Phone, Mail } from 'lucide-react';
+import { ArrowUpRight, Facebook, Instagram, MapPin, Phone, Mail, Youtube } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useHospitalSettings from '../hooks/useHospitalSettings.jsx';
 
-const footerLinks = [
-  ['About Us', '/about'],
-  ['Our Services', '/about'],
-  ['Family Health Care', '/family-healthcare'],
-  ['Testimonials', '/testimonials'],
-  ['Child Care', '/child-care'],
-  ['Eye Care', '/eye-care'],
-  ['Dental Care', '/dental-care'],
-  ['Our Doctors', '/doctors'],
+const exploreLinks = [
   ['Gallery', '/gallery'],
   ['Health Guides', '/blog'],
+  ['Our Blog', '/blog'],
   ['Book Appointment', '/appointment'],
-  ['Contact Us', '/contact'],
 ];
 
 export default function Footer() {
-  const { contact, socialLinks, logoUrl } = useHospitalSettings();
+  const { contact, socialLinks, logoUrl, maintainerUrl } = useHospitalSettings();
+  const hasYoutubeLink = socialLinks.some(
+    ({ label }) => label.trim().toLowerCase() === 'youtube',
+  );
   return (
     <footer className="site-footer">
       <div className="container footer-main">
@@ -35,7 +30,12 @@ export default function Footer() {
           </Link>
           <div className="footer-social-links" aria-label="Social media">
             {socialLinks.map(({ label, url }) => {
-              const Icon = label === 'Facebook' ? Facebook : Instagram;
+              const normalizedLabel = label.trim().toLowerCase();
+              const Icon = normalizedLabel === 'facebook'
+                ? Facebook
+                : normalizedLabel === 'youtube'
+                  ? Youtube
+                  : Instagram;
               return (
                 <a
                   key={label}
@@ -48,11 +48,19 @@ export default function Footer() {
                 </a>
               );
             })}
+            {!hasYoutubeLink && (
+              <span
+                title="YouTube channel URL needs to be configured"
+                aria-label="YouTube channel URL needs to be configured"
+              >
+                <Youtube size={17} aria-hidden="true" />
+              </span>
+            )}
           </div>
         </div>
         <div className="footer-column">
           <h2>Explore</h2>
-          {footerLinks.map(([label, to]) => (
+          {exploreLinks.map(([label, to]) => (
             <Link key={label} to={to}>
               {label}
             </Link>
@@ -60,9 +68,11 @@ export default function Footer() {
         </div>
         <div className="footer-column footer-contact">
           <h2>Contact</h2>
-          <a href={`tel:${contact.phoneLink}`}>
-            <Phone size={16} aria-hidden="true" /> {contact.phone}
-          </a>
+          {contact.phoneNumbers.map(({ number, phoneLink }) => (
+            <a key={phoneLink} href={`tel:${phoneLink}`}>
+              <Phone size={16} aria-hidden="true" /> {number}
+            </a>
+          ))}
           <a href={`mailto:${contact.email}`}>
             <Mail size={16} aria-hidden="true" /> {contact.email}
           </a>
@@ -75,7 +85,14 @@ export default function Footer() {
         <div className="container footer-bottom-inner">
           <div className="footer-attribution">
             <span>© {new Date().getFullYear()} DH Hospitals. All Rights Reserved.</span>
-            <span>Website Maintained by Abhit Technologies</span>
+            <span>
+              Maintained by{' '}
+              {maintainerUrl ? (
+                <a href={maintainerUrl} target="_blank" rel="noopener noreferrer">Abhit.in</a>
+              ) : (
+                'Abhit.in'
+              )}
+            </span>
           </div>
           <span>Child Care · Eye Care · Dental</span>
         </div>

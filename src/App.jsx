@@ -37,9 +37,9 @@ const pageDetails = {
       'Explore published DH Hospitals services supporting healthcare across different stages of life.',
   },
   '/testimonials': {
-    title: 'Testimonials | DH Hospitals',
+    title: 'Google Reviews | DH Hospitals',
     description:
-      'Patient feedback for DH Hospitals. Testimonials will be published after approval.',
+      'Google patient reviews for DH Hospitals are shown only when an authorized source is configured.',
   },
   '/child-care': {
     title: 'Child Care | DH Hospitals',
@@ -187,7 +187,7 @@ function PageEffects() {
         name: 'DH Hospitals',
         url: 'https://dhhospitals.com/',
         image: 'https://dhhospitals.com/images/hospital-cover.webp',
-        telephone: contact.phone,
+        telephone: contact.phoneNumbers.map(({ number }) => number),
         email: contact.email,
         address: {
           '@type': 'PostalAddress',
@@ -252,7 +252,7 @@ function PageEffects() {
     } else {
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
-  }, [contact.email, contact.phone, location.pathname, location.hash]);
+  }, [contact.email, contact.phoneNumbers, location.pathname, location.hash]);
 
   return null;
 }

@@ -25,8 +25,8 @@ export default function Contact() {
           <div className="container">
             <SectionHeading
               eyebrow="Get in touch"
-              title="Contact DH Hospitals."
-              description="Reach the hospital using the published contact details below."
+              title="DH Hospitals"
+              description="Penamaluru, Vijayawada"
             />
             <div className="contact-card-grid">
               <article className="contact-card">
@@ -44,7 +44,7 @@ export default function Contact() {
               </article>
               <article className="contact-card">
                 <span className="contact-card-icon"><Phone size={22} /></span>
-                <h2>Call us</h2>
+                <h2>Call for Appointments</h2>
                 <a href={`tel:${contactPagePhone}`}>{contactPagePhone}</a>
               </article>
               <article className="contact-card">
@@ -55,7 +55,7 @@ export default function Contact() {
               </article>
               <article className="contact-card">
                 <span className="contact-card-icon"><Clock3 size={22} /></span>
-                <h2>Operating hours</h2>
+                <h2>Emergency Services Available 24/7</h2>
                 {contact.hours.map((hours) => (
                   <p key={hours.days}><strong>{hours.days}</strong><br />{hours.time}</p>
                 ))}

@@ -5,23 +5,19 @@ export default function Testimonials() {
     <main>
       <PageIntro
         eyebrow="Testimonials"
-        title="Patient feedback"
-        description="Patient feedback will be shared here after it has been approved for publication."
+        title="Google patient reviews"
+        description="Reviews are unavailable until an authorized Google Reviews source is configured."
       />
       <section className="section testimonials-section">
         <div className="container">
           <SectionHeading
             eyebrow="Testimonials"
-            title="Patient experiences"
-            description="No approved patient testimonials are currently available."
+            title="Google patient reviews"
+            description="Only reviews from an authorized Google source will be shown here."
           />
-          <article className="testimonial-placeholder">
-            <span className="eyebrow">Sample placeholder — not a real patient review</span>
-            <p>
-              “Approved patient feedback can be added here when it is available.”
-            </p>
-            <span>Replace this sample with approved patient feedback.</span>
-          </article>
+          <div className="testimonial-placeholder" role="status">
+            <p>Google Reviews integration is not configured.</p>
+          </div>
         </div>
       </section>
     </main>

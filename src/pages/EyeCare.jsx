@@ -7,12 +7,14 @@ import DoctorCard from '../components/DoctorCard.jsx';
 import CallToAction from '../components/CallToAction.jsx';
 import AnimatedCareCharacter from '../components/AnimatedCareCharacter.jsx';
 import usePublicDoctors from '../hooks/usePublicDoctors.js';
+import useDepartmentCursorMotion from '../hooks/useDepartmentCursorMotion.js';
 
 export default function EyeCare() {
   const { doctors } = usePublicDoctors('eye-care');
+  const cursorMotionHandlers = useDepartmentCursorMotion();
   return (
     <>
-      <main>
+      <main className="department-care-page cursor-motion-page" {...cursorMotionHandlers}>
         <PageIntro
           eyebrow="Eye Care"
           title="Eye care for clear, confident vision."
@@ -23,11 +25,11 @@ export default function EyeCare() {
         <section className="section service-detail-intro">
           <div className="container service-detail-layout">
             <div className="service-detail-copy">
-              <span className="eyebrow">DH Hospitals</span>
-              <h2>Advanced Eye Care</h2>
+              <span className="eyebrow">Led by <span className="doctor-name-highlight">Dr. Haasitha Chigurupati</span></span>
               <p>
-                DH Hospitals publishes information about vision screening,
-                cataract surgery, LASIK, and related eye-care services.
+                MBBS, MS Ophthalmology<br />
+                Consultant Ophthalmologist &amp; Cataract Surgeon<br />
+                13+ Years of Clinical Experience
               </p>
               <Link className="button" to="/appointment?department=Eye%20Care">
                 Book Eye Appointment <span aria-hidden="true">↗</span>
@@ -70,16 +72,22 @@ export default function EyeCare() {
             </div>
             <div className="eye-point">
               <ScanEye size={24} />
-              <h3>Optics consultations</h3>
-              <p>Expert consultations for optics.</p>
+              <h3>Complete Optical Services</h3>
+              <p>Prescription Glasses · Optical Frames &amp; Lenses · Sunglasses &amp; Vision Accessories</p>
             </div>
             <div className="eye-point">
               <Sparkles size={24} />
-              <h3>Contact lens consultations</h3>
-              <p>Expert consultations for contact lenses.</p>
+              <h3>Contact Lens Care</h3>
+              <p>Contact Lens Consultation &amp; Fitting</p>
             </div>
           </div>
         </section>
+        <p className="container" style={{ paddingBlock: '34px' }}>
+          Our department is equipped with advanced diagnostic equipment, modern operating microscopes,
+          and phacoemulsification technology to ensure safe and effective surgical outcomes.
+          Whether you need a routine eye check-up, cataract surgery, LASIK vision correction,
+          or specialized eye care, our team is committed to helping you achieve the best possible visual outcomes.
+        </p>
         <section className="section specialist-section">
           <div className="container specialist-layout">
             <div>

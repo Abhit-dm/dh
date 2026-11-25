@@ -49,8 +49,9 @@ export default function DoctorProfile() {
           {doctor.imageUrl ? (
             <img className="doctor-profile-photo" src={doctor.imageUrl} alt={formatDoctorName(doctor.name)} />
           ) : (
-            <div className="doctor-profile-photo doctor-profile-photo-unavailable" aria-hidden="true">
-              <UserRound size={60} strokeWidth={1.25} />
+                <div className="doctor-profile-photo doctor-profile-photo-unavailable">
+                  <UserRound size={60} strokeWidth={1.25} aria-hidden="true" />
+                  <span>DH Hospitals specialist</span>
             </div>
           )}
           <div className="doctor-profile-copy">

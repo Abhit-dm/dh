@@ -22,49 +22,85 @@ import {
 import DoctorCard from '../components/DoctorCard.jsx';
 import Reveal from '../components/Reveal.jsx';
 import CallToAction from '../components/CallToAction.jsx';
-import SpecializationGrid from '../components/SpecializationGrid.jsx';
 import usePublicDoctors from '../hooks/usePublicDoctors.js';
 
 const careHighlights = [
   {
     icon: Baby,
-    title: 'Care through age 18',
-    description:
-      'Pediatric care is described for newborns, infants, and adolescents up to 18 years old.',
+    title: '25-Bedded Family Hospital',
+    description: 'A trusted family hospital providing care for every member of the family.',
     to: '/child-care',
   },
   {
     icon: HeartHandshake,
-    title: 'Pediatric health support',
-    description:
-      'Listed pediatric services include care for skin problems, nebulization, and diet feeding counseling.',
+    title: 'Established in 2019',
+    to: '/about',
+  },
+  {
+    icon: ScanLine,
+    title: 'Penamaluru, Vijayawada',
+    description: 'Serving families in Penamaluru and the surrounding Vijayawada community.',
+    to: '/contact',
+  },
+  {
+    icon: Stethoscope,
+    title: 'Experienced Medical Specialists',
+    description: 'Pediatric, ophthalmology, and dental specialist-led care.',
+    to: '/doctors',
+  },
+  {
+    icon: HeartHandshake,
+    title: 'Dedicated Pediatric, Eye Care & Dental Departments',
+    description: 'Specialized departments for children, vision, and dental health.',
     to: '/child-care',
   },
   {
     icon: Eye,
-    title: 'Eye services',
-    description:
-      'DH Hospitals lists vision screening, cataract surgery, LASIK, and related consultations.',
-    to: '/eye-care',
+    title: 'Fully Equipped NICU & PICU Facilities',
+    description: 'Neonatal and pediatric critical-care facilities.',
+    to: '/child-care',
+  },
+  {
+    icon: Stethoscope,
+    title: 'Neonatal & Pediatric Critical Care Equipment',
+    description: 'Ventilation, monitoring, warming, CPAP, HFNC, and phototherapy support.',
+    to: '/child-care',
   },
   {
     icon: ScanEye,
-    title: 'Dental care',
-    description:
-      'Explore dental services and contact the hospital for information about care.',
-    to: '/dental-care',
+    title: '24/7 Emergency Services',
+    description: 'Round-the-clock emergency healthcare support.',
+    to: '/family-healthcare',
   },
   {
     icon: Siren,
-    title: '24/7 Emergency',
-    description: 'DH Hospitals provides emergency services around the clock.',
-    to: '/contact',
+    title: '24/7 Laboratory Services',
+    description: 'Laboratory services available around the clock.',
+    to: '/family-healthcare',
+  },
+  {
+    icon: HeartHandshake,
+    title: '24/7 Pharmacy',
+    description: 'Pharmacy support available around the clock.',
+    to: '/family-healthcare',
+  },
+  {
+    icon: Stethoscope,
+    title: 'Inpatient Care Facilities',
+    description: 'General wards, sharing rooms, non-AC rooms, and private AC rooms.',
+    to: '/family-healthcare',
   },
   {
     icon: ScanLine,
-    title: 'Diagnostics',
-    description: 'Contact DH Hospitals for information about diagnostics services.',
+    title: 'Affordable & Ethical Healthcare',
+    description: 'Quality healthcare delivered with compassion and transparency.',
     to: '/contact',
+  },
+  {
+    icon: Stethoscope,
+    title: 'Child-Friendly & Family-Friendly Environment',
+    description: 'A caring, welcoming environment for patients and families.',
+    to: '/about',
   },
 ];
 
@@ -120,7 +156,7 @@ function CareFeature({
 }
 
 export default function Home() {
-  const { contact, homepage } = useHospitalSettings();
+  const { homepage } = useHospitalSettings();
   const { doctors } = usePublicDoctors();
   return (
     <main>
@@ -159,7 +195,9 @@ export default function Home() {
         <div className="container home-intro-inner">
           <span className="eyebrow">A hospital for families</span>
           <p>
-            Care for children&apos;s health, vision, and dental needs at DH Hospitals.
+            DH Hospitals is a trusted 25-bedded family hospital in Penamaluru, Vijayawada,
+            providing compassionate, affordable, and comprehensive healthcare for every member
+            of your family.
           </p>
           <Link className="text-link" to="/about">
             About the hospital <ArrowUpRight size={15} aria-hidden="true" />
@@ -167,105 +205,53 @@ export default function Home() {
         </div>
       </section>
 
-      <SpecializationGrid />
-
       <section className="section home-services" id="services">
         <div className="container">
           <div className="story-heading-row">
             <Reveal>
               <span className="eyebrow">Our services</span>
-              <h2>Care for every family.</h2>
+              <h2>One Stop Solution for All Family Health Needs</h2>
             </Reveal>
             <Reveal>
-              <p>
-                Explore the seven departments and the services listed by DH Hospitals.
-              </p>
+              <p>Explore the departments and healthcare services available at DH Hospitals.</p>
             </Reveal>
           </div>
           <div className="service-grid home-service-grid">
-            <Reveal delay={0}>
-              <article className="service-card">
-                <Link
-                  to="/child-care"
-                  className="service-image-link"
-                  aria-label="Explore Child Care"
-                >
-                  <img
-                    src={CHILD_CARE_MAIN_IMAGE}
-                    alt="Child Care at DH Hospitals – Doctor caring for a young patient."
-                    width={1536}
-                    height={1024}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <span className="service-image-arrow">
-                    <ArrowUpRight size={19} aria-hidden="true" />
-                  </span>
-                </Link>
-                <div className="service-card-copy">
-                  <span className="service-number">01 / CHILD CARE</span>
-                  <h3>Child Care</h3>
-                  <p>{childServices[0].description}</p>
-                  <Link className="text-link" to="/child-care">
-                    Explore child care <ArrowUpRight size={15} aria-hidden="true" />
+            {[
+              ['01', 'Child Care', 'Newborn, pediatric, vaccination, and developmental care.', '/child-care', '/images/child-care-main.webp', 'Pediatric consultation at DH Hospitals'],
+              ['02', 'Eye Care', 'Comprehensive examinations and vision care.', '/eye-care', '/images/vision-screening.webp', 'Eye examination at DH Hospitals'],
+              ['03', 'Dental Care', 'Preventive, restorative, cosmetic, and implant dental care.', '/dental-care', '/images/general-dentistry.webp', 'Dental consultation at DH Hospitals'],
+              ['04', 'Obstetrics & Gynecology', 'Women’s healthcare consultation and specialist services.', '/family-healthcare', '/images/obstetrics-gynecology.jpg', 'Women’s healthcare consultation'],
+              ['05', 'Infertility Services', 'Information about infertility consultation and specialist support.', '/family-healthcare', '/images/infertility-services.jpg', 'Infertility consultation'],
+              ['06', 'General Surgery', 'General surgical consultation and inpatient support.', '/family-healthcare', '/images/general-surgery.jpg', 'General surgical environment'],
+              ['07', 'Pediatric Surgery', 'Surgical consultation and care for children.', '/family-healthcare', '/images/pediatric-surgery.jpg', 'Pediatric surgical consultation'],
+              ['08', 'Pediatric Orthopedics', 'Bone and joint care for children.', '/family-healthcare', '/images/pediatric-orthopedics.jpg', 'Pediatric orthopedic consultation'],
+              ['09', 'Pediatric Neurology', 'Neurological consultation and care for children.', '/family-healthcare', '/images/pediatric-neurology.jpg', 'Pediatric neurological consultation'],
+              ['10', 'ENT (Ear, Nose & Throat)', 'ENT examination and specialist consultation.', '/family-healthcare', '/images/ent-ear-exam.jpg', 'ENT ear examination'],
+              ['11', 'Plastic Surgery', 'Plastic surgery consultation and specialist services.', '/family-healthcare', '/images/plastic-surgery.jpg', 'Plastic surgery consultation'],
+              ['12', 'General Orthopedics', 'Bone, joint, and orthopedic consultation.', '/family-healthcare', '/images/orthopedics.jpg', 'Orthopedic consultation'],
+              ['13', 'Psychiatry', 'Professional mental-health consultation and support.', '/family-healthcare', '/images/psychiatry.jpg', 'Mental wellness consultation'],
+              ['14', 'Psychological Counselling', 'Confidential psychological counselling support.', '/family-healthcare', '/images/psychological-counselling.jpg', 'Psychological counselling consultation'],
+              ['15', 'Emergency Services', 'Round-the-clock emergency medical care.', '/family-healthcare', '/images/emergency-services.jpg', 'Emergency care facility'],
+              ['16', 'Laboratory Services', '24/7 laboratory testing and diagnostic support.', '/family-healthcare', '/images/laboratory-services.jpg', 'Laboratory testing'],
+              ['17', 'Pharmacy', '24/7 pharmacy and medication support.', '/family-healthcare', '/images/pharmacy.jpg', 'Hospital pharmacy'],
+              ['18', 'Inpatient Care', 'Comfortable inpatient accommodation and clinical care.', '/family-healthcare', '/images/inpatient-room-care.jpg', 'A patient receiving care in a hospital room'],
+            ].map(([number, title, description, to, image, imageAlt], index) => (
+              <Reveal key={title} delay={(index % 6) * 70}>
+                <article className="service-card">
+                  <Link to={to} className="service-image-link" aria-label={`Explore ${title}`}>
+                    <img src={image} alt={imageAlt} loading="lazy" decoding="async" />
+                    <span className="service-image-arrow"><ArrowUpRight size={19} aria-hidden="true" /></span>
                   </Link>
-                </div>
-              </article>
-            </Reveal>
-            <Reveal delay={100}>
-              <article className="service-card">
-                <Link
-                  to="/eye-care"
-                  className="service-image-link"
-                  aria-label="Explore Eye Care"
-                >
-                  <img
-                    src="/images/vision-screening.webp"
-                    alt="Vision screening at DH Hospitals"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <span className="service-image-arrow">
-                    <ArrowUpRight size={19} aria-hidden="true" />
-                  </span>
-                </Link>
-                <div className="service-card-copy">
-                  <span className="service-number">02 / EYE CARE</span>
-                  <h3>Eye Care</h3>
-                  <p>{eyeServices[0].description}</p>
-                  <Link className="text-link" to="/eye-care">
-                    Explore eye care <ArrowUpRight size={15} aria-hidden="true" />
-                  </Link>
-                </div>
-              </article>
-            </Reveal>
-            <Reveal delay={200}>
-              <article className="service-card">
-                <Link
-                  to="/dental-care"
-                  className="service-image-link"
-                  aria-label="Explore Dental Care"
-                >
-                  <img
-                    src={dentalServices[0].image}
-                    alt="General dentistry services"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <span className="service-image-arrow">
-                    <ArrowUpRight size={19} aria-hidden="true" />
-                  </span>
-                </Link>
-                <div className="service-card-copy">
-                  <span className="service-number">03 / DENTAL CARE</span>
-                  <h3>Dental Care</h3>
-                  <p>{dentalServices[0].description}</p>
-                  <Link className="text-link" to="/dental-care">
-                    Explore dental care <ArrowUpRight size={15} aria-hidden="true" />
-                  </Link>
-                </div>
-              </article>
-            </Reveal>
+                  <div className="service-card-copy">
+                    <span className="service-number">{number} / {title.toUpperCase()}</span>
+                    <h3>{title}</h3>
+                    <p>{description}</p>
+                    <Link className="text-link" to={to}>Explore service <ArrowUpRight size={15} aria-hidden="true" /></Link>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
@@ -370,15 +356,13 @@ export default function Home() {
               loading="lazy"
               decoding="async"
             />
-            <span>DH Hospitals · Poranki</span>
+            <span>DH Hospitals · Penamaluru </span>
           </Reveal>
           <Reveal className="facilities-copy">
             <span className="eyebrow">Hospital information</span>
-            <h2>Services for children&apos;s health and vision.</h2>
+            <h2>Comprehensive family healthcare.</h2>
             <p>
-              DH Hospitals presents pediatric, eye-care, and dental services
-              at its Poranki hospital. Contact the team for current details
-              about facilities and equipment.
+              At DH Hospitals, your family&apos;s health, comfort, and well-being always come first.
             </p>
             <Link className="text-link" to="/about">
               About our hospital <ArrowUpRight size={16} aria-hidden="true" />
@@ -392,8 +376,7 @@ export default function Home() {
           <div className="section-row-heading">
             <div>
               <span className="eyebrow">Our doctors</span>
-              <h2>Meet the care team.</h2>
-              <p>Doctors and qualifications listed by DH Hospitals.</p>
+              <h2>Meet Our Specialists</h2>
             </div>
             <Link className="text-link doctors-view-all" to="/doctors">
               View all doctors <ArrowUpRight size={15} aria-hidden="true" />
@@ -477,25 +460,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="home-contact-strip">
-        <div className="container home-contact-inner">
-          <div>
-            <span className="eyebrow eyebrow-light">Contact DH Hospitals</span>
-            <h2>Care starts with a conversation.</h2>
-            <p>{contact.address}</p>
-          </div>
-          <div className="home-contact-actions">
-            <a className="button button-light" href={`tel:${contact.phoneLink}`}>
-              Call {contact.phone} <ArrowUpRight size={16} aria-hidden="true" />
-            </a>
-            <Link className="button button-outline-light" to="/contact">
-              Contact Us <ArrowRight size={16} aria-hidden="true" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <CallToAction eyebrow="We are here to help" />
+      <CallToAction eyebrow="We are here to help" showPhone={false} />
     </main>
   );
 }

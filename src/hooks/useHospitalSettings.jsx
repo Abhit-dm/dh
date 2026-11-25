@@ -2,9 +2,19 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { contact as verifiedContact, socialLinks as verifiedSocialLinks } from '../data/hospital.js';
 
 const HospitalSettingsContext = createContext(null);
+const fallbackMaintainerUrl = 'https://abhit.in';
+
+function getPhoneNumbers(primary) {
+  if (typeof primary !== 'string') return [];
+  const phoneLink = primary.replace(/[^\d+]/g, '');
+  if (!/^\+?\d{7,15}$/.test(phoneLink)) return [];
+  return [{ number: primary, phoneLink }];
+}
+
 const fallbackContact = {
   ...verifiedContact,
   phoneLink: verifiedContact.phone.replace(/[^\d+]/g, ''),
+  phoneNumbers: getPhoneNumbers(verifiedContact.phone),
 };
 
 function settingString(value, fallback) {
@@ -18,6 +28,15 @@ function safeImageUrl(value, fallback) {
     return new URL(value).protocol === 'https:' ? value : fallback;
   } catch {
     return fallback;
+  }
+}
+
+function safeExternalUrl(value) {
+  if (typeof value !== 'string') return '';
+  try {
+    return new URL(value).protocol === 'https:' ? value : '';
+  } catch {
+    return '';
   }
 }
 
@@ -59,6 +78,11 @@ export function HospitalSettingsProvider({ children }) {
 
   const settings = useMemo(() => {
     const phone = settingString(values['contact.phone'], verifiedContact.phone);
+    const configuredPhoneNumbers = getPhoneNumbers(phone);
+    const phoneNumbers = configuredPhoneNumbers.length
+      ? configuredPhoneNumbers
+      : fallbackContact.phoneNumbers;
+    const primaryPhone = phoneNumbers[0];
     const email = settingString(values['contact.email'], verifiedContact.email);
     const hoursValue = values['contact.hours'];
     const hours = Array.isArray(hoursValue) && hoursValue.every(
@@ -67,18 +91,20 @@ export function HospitalSettingsProvider({ children }) {
     return {
       contact: {
         address: settingString(values['contact.address'], verifiedContact.address),
-        phone,
-        phoneLink: phone.replace(/[^\d+]/g, ''),
+        phone: primaryPhone.number,
+        phoneLink: primaryPhone.phoneLink,
+        phoneNumbers,
         email,
         hours,
       },
       logoUrl: safeImageUrl(values['branding.logo'], '/images/dh-hospitals-logo.png'),
+      maintainerUrl: safeExternalUrl(values['branding.maintainerUrl']) || fallbackMaintainerUrl,
       socialLinks: publicSocialLinks(values['social.links']),
       homepage: {
-        heroTitle: settingString(values['homepage.heroTitle'], "Caring for Every Child's Health and Vision."),
+        heroTitle: settingString(values['homepage.heroTitle'], 'DH Hospitals – Best Treatment at Affordable Pricing'),
         heroDescription: settingString(
           values['homepage.heroDescription'],
-          'Comprehensive pediatric care, eye care, and dental services in Poranki, Vijayawada.',
+          "Your Family's Trusted Healthcare Partner in Vijayawada",
         ),
       },
     };
@@ -95,10 +121,11 @@ export default function useHospitalSettings() {
   return useContext(HospitalSettingsContext) ?? {
     contact: fallbackContact,
     logoUrl: '/images/dh-hospitals-logo.png',
+    maintainerUrl: fallbackMaintainerUrl,
     socialLinks: verifiedSocialLinks,
     homepage: {
-      heroTitle: "Caring for Every Child's Health and Vision.",
-      heroDescription: 'Comprehensive pediatric care, eye care, and dental services in Poranki, Vijayawada.',
+      heroTitle: 'DH Hospitals – Best Treatment at Affordable Pricing',
+      heroDescription: "Your Family's Trusted Healthcare Partner in Vijayawada",
     },
   };
 }
