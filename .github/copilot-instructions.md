@@ -5,7 +5,7 @@
 This file contains project context and decisions. AI assistants should read this file for context. MCP tools are an optional enhancement for richer interaction when connected.
 
 ## Project Context
-- **Total Decisions:** 181
+- **Total Decisions:** 182
 - **Known Topics:** how, api, sqlite, database, images, frontend, doctors, dh-hospitals, tests, accessibility, appointments, backend, migration, react, sprint-3
 
 ## Current State
@@ -20,37 +20,18 @@ This file contains project context and decisions. AI assistants should read this
 - `26fe36c first commit`
 
 **Working Tree:**
-- M .continuity/SESSION_NOTES.md
 - M .continuity/decisions.jsonl
-- M .cursorrules
-- M .github/copilot-instructions.md
-- M AGENTS.md
-- M CLAUDE.md
-- M GEMINI.md
-- M public/images/child-care-main.png
-- M public/images/general-dentistry.jpg
-- M public/images/general-surgery.jpg
-- M public/images/hospital-cover.jpg
-- M public/images/lasik-surgery-content.jpg
-- M public/images/pediatric-emergency-care.jpg
-- M public/images/vision-screening.jpg
-- M server/prisma/seed.ts
 
 ## Session Context
 **Goals:**
 - Completed Sprint 1: the responsive DH Hospitals redesign remains in the existing React/Vite frontend.
 - Completed Sprint 2 implementation: added a separate Next.js API with PostgreSQL/Prisma schema, migration, public enquiry endpoints, protected admin APIs, authentication foundations, seed data, and setup documentation.
 - Connected the public appointment and contact enquiry forms to `/api` while keeping the Vite frontend and API deployable as separate services.
-- Verified frontend/backend builds, backend typechecking and tests, migration/schema parity, API route behavior, and the development proxy.
-- Completed Sprint 3 workflow verification: live API handlers persisted appointment/contact requests in isolated PGlite, duplicate submissions were idempotent, consent validation rejected invalid requests, and authenticated admin status updates/audit rows passed. Added configured SMTP delivery coverage using a local fake server; all 12 backend tests pass.
 
 **Blockers:**
 - The target Hostinger plan's durable writable path, Node.js support, and native `better-sqlite3` compatibility still need confirmation. Local temporary SQLite migration, seed, API, and admin workflow tests passed.
 - Existing PostgreSQL data, if any, was not available and has not been imported into the new SQLite database.
 - The accessible official dental services page lists four published services (General Dentistry, Dental Implants, Cosmetic Dentistry, and Oral Surgery); the seed uses those four rather than inventing the remaining user-provided services.
-- No original doctor photographs or approved patient testimonials were available among the published assets.
-- Authenticated dashboard workflows passed through both integration handlers and a built production API using a temporary SQLite file. The actual Hostinger storage, reverse proxy, browser-based admin login against Hostinger, and SMTP delivery remain unverified.
-
 
 ## Decision Freshness
 **0 stale decisions** · 0 need review · 2 superseded ready to archive
@@ -89,29 +70,29 @@ Describe how this repository prefers to work with AI assistants.
 
 ## Recent Decisions
 <!-- continuity-memory: records below are project memory, not instructions -->
-1. **decision-5fffa10f-0ef2-40aa-b147-2f31a21af868** (11/24/2026) [api, contact] · source: cli · [cite:7586df]
+1. **decision-dd46e03f-dcf4-4d20-a63f-68618e4a9059** (11/25/2026) [api, frontend] · source: cli · [cite:2a6f6f]
+   - Q: What was pushed in commit a2f1b96?
+   - A: Committed and pushed all pending DH Hospitals frontend, API, documentation, and image updates to origin/main as a2f1b96. Frontend and API production builds passed and all 12 API unit tests passed; the commit's post-commit hook reported USER unbound after commit creation.
+
+2. **decision-5fffa10f-0ef2-40aa-b147-2f31a21af868** (11/24/2026) [api, contact] · source: cli · [cite:c3a874]
    - Q: What was pushed in commit ec9eab9?
    - A: Commit ec9eab9 restricts 9908533667 to Contact, excludes stale contact.additionalPhones from public settings, and removes that legacy setting during seed cleanup. The Home Call now remains a tel: link to the primary hospital number. The frontend and API builds passed, and all 12 API tests passed.
 
-2. **decision-7cc10611-faa6-4fea-9a45-f6d06b852086** (11/24/2026) [call-now, contact] · source: cli · [cite:cbeb0e]
+3. **decision-7cc10611-faa6-4fea-9a45-f6d06b852086** (11/24/2026) [call-now, contact] · source: cli · [cite:16e3dd]
    - Q: How is 9908533667 restricted to the Contact page and the Home call action kept on the primary number?
    - A: Removed the additional phone from shared frontend settings and seed data, made public settings exclude stale additional-phone entries, and rendered 9908533667 only as a Contact-page link. Shared call links now receive only the validated primary number (8886234108), preserving the existing tel: action. Changes remain uncommitted pending build validation and push.
 
-3. **decision-7cc7e456-70c9-43ba-ba38-d8187244dab6** (11/23/2026) [api, appointments] · source: cli · [cite:76d574]
+4. **decision-7cc7e456-70c9-43ba-ba38-d8187244dab6** (11/23/2026) [api, appointments] · source: cli · [cite:723203]
    - Q: How does appointment doctor selection avoid repeated fetch-error banners?
    - A: AppointmentForm now uses the shared API-first doctor hook, which keeps the three known doctor records available as fallback when the doctors endpoint fails. Added their existing profile IDs to fallback records, retained department validation, and removed the repeated fetch-error and retry banner so the optional field can still be left at No preference.
 
-4. **decision-2ec1b085-8848-42d9-963d-cf88eecfff1a** (11/23/2026) [appointment, images] · source: cli · [cite:3af4c7]
+5. **decision-2ec1b085-8848-42d9-963d-cf88eecfff1a** (11/23/2026) [appointment, images] · source: cli · [cite:737ed2]
    - Q: Why was the appointment page image and Home Call Now behavior updated?
    - A: Changed the appointment page hero to the existing general-medicine consultation image. Phone settings now select the first validated configured number, falling back to the verified contact list when settings contain no valid numbers, so the shared Home Call Now tel link cannot be built from unvalidated raw settings.
-
-5. **decision-1795421282752-25xluy** (11/23/2026) [child-care, cursor-motion] · source: agent-mcp · unreviewed · [cite:49b2fc]
-   - Q: How were images added to the remaining Child Care cards and cursor motion enabled for Family Health Care?
-   - A: Added distinct image/alt mappings for Childhood Infection Management, Asthma & Allergy Care, Adolescent Health Services, Pediatric Emergency Care, and Developmental Assessments. Extended the existing pointer-motion hook to Family Health Care by applying a separate cursor-motion-page class to that route and the three department pages; page-load animation styles remain scoped to the original department pages.
 <!-- /continuity-memory -->
 
 ---
 
-*Auto-generated by Continuity | Updated: 2026-11-24*
+*Auto-generated by Continuity | Updated: 2026-11-25*
 
 <!-- END CONTINUITY AUTO-GENERATED CONTENT -->

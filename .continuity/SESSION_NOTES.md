@@ -58,6 +58,7 @@
 - Added pointer-follow tilt and slight translation for images and animated mascots on Child Care, Eye Care, and Dental Care. Touch input and reduced-motion preference remain still. The Child Care hero image is unchanged; its secondary image now uses the distinct newborn-care image. Validation: production build and git diff --check passed; browser checks confirmed pointer-dependent transforms, reset on pointer leave, the image loads at 1200x800, and reduced-motion disables movement.
 - Added locally stored Pexels images for Childhood Infection Management, Asthma & Allergy Care, Adolescent Health Services, and Developmental Assessments; used the existing pediatric emergency-response image for Pediatric Emergency Care. Extended cursor-follow image movement to Family Health Care, keeping the department page-load animation scope unchanged. Validation: npm run build and git diff --check passed; browser checks confirmed all five child-care images load distinctly and family-healthcare images respond to pointer movement.
 - Appointment doctor selection stays API-first, with the three supplied doctor IDs in local fallback records. If the doctor-list request fails, department-specific fallback options remain selectable and the UI omits the repeated error/retry banner; doctor preference remains optional.
+- Pushed the current DH Hospitals frontend, API, documentation, and image updates to `origin/main` in commits `a2f1b96` and `5a415fa`. Frontend/API production builds and all 12 API tests passed.
 
 
 ## 🚧 Blockers & Challenges
