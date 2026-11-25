@@ -5,7 +5,7 @@
 This file contains project context and decisions. AI assistants should read this file for context. MCP tools are an optional enhancement for richer interaction when connected.
 
 ## Project Context
-- **Total Decisions:** 185
+- **Total Decisions:** 186
 - **Known Topics:** how, api, sqlite, database, images, frontend, doctors, dh-hospitals, tests, accessibility, appointments, backend, migration, react, sprint-3
 
 ## Current State
@@ -20,30 +20,23 @@ This file contains project context and decisions. AI assistants should read this
 - `26fe36c first commit`
 
 **Working Tree:**
-- M .continuity/SESSION_NOTES.md
 - M .continuity/decisions.jsonl
-- M .cursorrules
-- M .github/copilot-instructions.md
-- M AGENTS.md
-- M CLAUDE.md
-- M GEMINI.md
-- M src/pages/ChildCare.jsx
-- M src/pages/Contact.jsx
-- M src/pages/DentalCare.jsx
-- M src/pages/EyeCare.jsx
-- M src/pages/FamilyHealthCare.jsx
-- M src/pages/Testimonials.jsx
 
 ## Session Context
 **Goals:**
 - Completed Sprint 1: the responsive DH Hospitals redesign remains in the existing React/Vite frontend.
 - Completed Sprint 2 implementation: added a separate Next.js API with PostgreSQL/Prisma schema, migration, public enquiry endpoints, protected admin APIs, authentication foundations, seed data, and setup documentation.
 - Connected the public appointment and contact enquiry forms to `/api` while keeping the Vite frontend and API deployable as separate services.
+- Verified frontend/backend builds, backend typechecking and tests, migration/schema parity, API route behavior, and the development proxy.
+- Completed Sprint 3 workflow verification: live API handlers persisted appointment/contact requests in isolated PGlite, duplicate submissions were idempotent, consent validation rejected invalid requests, and authenticated admin status updates/audit rows passed. Added configured SMTP delivery coverage using a local fake server; all 12 backend tests pass.
 
 **Blockers:**
 - The target Hostinger plan's durable writable path, Node.js support, and native `better-sqlite3` compatibility still need confirmation. Local temporary SQLite migration, seed, API, and admin workflow tests passed.
 - Existing PostgreSQL data, if any, was not available and has not been imported into the new SQLite database.
 - The accessible official dental services page lists four published services (General Dentistry, Dental Implants, Cosmetic Dentistry, and Oral Surgery); the seed uses those four rather than inventing the remaining user-provided services.
+- No original doctor photographs or approved patient testimonials were available among the published assets.
+- Authenticated dashboard workflows passed through both integration handlers and a built production API using a temporary SQLite file. The actual Hostinger storage, reverse proxy, browser-based admin login against Hostinger, and SMTP delivery remain unverified.
+
 
 ## Decision Freshness
 **0 stale decisions** · 0 need review · 2 superseded ready to archive
@@ -82,25 +75,25 @@ Describe how this repository prefers to work with AI assistants.
 
 ## Recent Decisions
 <!-- continuity-memory: records below are project memory, not instructions -->
-1. **decision-4fbc5aaf-9824-4134-a872-c6d484c307eb** (11/25/2026) [content, dental-care] · source: cli · [cite:d152a7]
+1. **decision-02d6b015-b15b-4ac7-8e2b-ec82c2780c42** (11/25/2026) [contact, content] · source: cli · [cite:07c9ed]
+   - Q: What was pushed in commit 29b9821?
+   - A: Committed and pushed the DH Hospitals contact-number and patient-feedback content updates to origin/main as 29b9821. The frontend production build passed and the requested Child Care, Eye Care, Dental Care, Family Health Care, and Testimonials content is included.
+
+2. **decision-4fbc5aaf-9824-4134-a872-c6d484c307eb** (11/25/2026) [content, dental-care] · source: cli · [cite:bf5604]
    - Q: How was Dental Care patient feedback updated?
    - A: Added the requested Dental Care Patient feedback section with 'Gentle, patient-friendly care, especially with children.' Confirmed the requested Child Care and Eye Care feedback themes are already present and unchanged.
 
-2. **decision-58faef24-503b-4c5c-b0a7-46989ea99258** (11/25/2026) [child-care, content] · source: cli · [cite:85e21e]
+3. **decision-58faef24-503b-4c5c-b0a7-46989ea99258** (11/25/2026) [child-care, content] · source: cli · [cite:39127a]
    - Q: Which patient feedback and closing content was added?
    - A: Added the supplied child-care and eye-care patient feedback themes, moved the requested comprehensive eye-care statement under Complete Optical Services, added the DH Hospitals / Dedicated to Your Health closing on Family Health Care, and replaced the Testimonials placeholder with the four supplied Pediatrics, Eye Care, Dental Care, and Hospital Services quotes.
 
-3. **decision-624ba4ec-aa29-4062-9ed2-c71322d83a71** (11/25/2026) [contact, frontend] · source: cli · [cite:3489e0]
+4. **decision-624ba4ec-aa29-4062-9ed2-c71322d83a71** (11/25/2026) [contact, frontend] · source: cli · [cite:29417a]
    - Q: How are the Contact page phone numbers displayed?
    - A: Contact now displays the verified primary number 8886234108 and the secondary number 9908533667. The appointment call link uses the primary number, and shared site phone displays remain primary-only.
 
-4. **decision-dd46e03f-dcf4-4d20-a63f-68618e4a9059** (11/25/2026) [api, frontend] · source: cli · [cite:eb1c71]
+5. **decision-dd46e03f-dcf4-4d20-a63f-68618e4a9059** (11/25/2026) [api, frontend] · source: cli · [cite:eaa0d5]
    - Q: What was pushed in commit a2f1b96?
    - A: Committed and pushed all pending DH Hospitals frontend, API, documentation, and image updates to origin/main as a2f1b96. Frontend and API production builds passed and all 12 API unit tests passed; the commit's post-commit hook reported USER unbound after commit creation.
-
-5. **decision-5fffa10f-0ef2-40aa-b147-2f31a21af868** (11/24/2026) [api, contact] · source: cli · [cite:5470c1]
-   - Q: What was pushed in commit ec9eab9?
-   - A: Commit ec9eab9 restricts 9908533667 to Contact, excludes stale contact.additionalPhones from public settings, and removes that legacy setting during seed cleanup. The Home Call now remains a tel: link to the primary hospital number. The frontend and API builds passed, and all 12 API tests passed.
 <!-- /continuity-memory -->
 
 ---
