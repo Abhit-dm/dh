@@ -74,6 +74,10 @@ export default function EyeCare() {
               <ScanEye size={24} />
               <h3>Complete Optical Services</h3>
               <p>Prescription Glasses · Optical Frames &amp; Lenses · Sunglasses &amp; Vision Accessories</p>
+              <p>
+                Whether you need a routine eye check-up, cataract surgery, LASIK vision correction,
+                or specialized eye care, our team is committed to helping you achieve the best possible visual outcomes.
+              </p>
             </div>
             <div className="eye-point">
               <Sparkles size={24} />
@@ -85,8 +89,6 @@ export default function EyeCare() {
         <p className="container" style={{ paddingBlock: '34px' }}>
           Our department is equipped with advanced diagnostic equipment, modern operating microscopes,
           and phacoemulsification technology to ensure safe and effective surgical outcomes.
-          Whether you need a routine eye check-up, cataract surgery, LASIK vision correction,
-          or specialized eye care, our team is committed to helping you achieve the best possible visual outcomes.
         </p>
         <section className="section specialist-section">
           <div className="container specialist-layout">
@@ -95,6 +97,18 @@ export default function EyeCare() {
               <h2>Meet your ophthalmologist.</h2>
             </div>
             {doctors[0] && <DoctorCard doctor={doctors[0]} />}
+          </div>
+        </section>
+        <section className="section testimonials-section">
+          <div className="container">
+            <SectionHeading
+              eyebrow="Eye Care"
+              title="Patient feedback"
+            />
+            <article className="testimonial-placeholder">
+              <p>Highly trusted for cataract surgery outcomes and compassionate eye care.</p>
+              <span>Eye Care</span>
+            </article>
           </div>
         </section>
         <CallToAction eyebrow="Eye care appointments" />

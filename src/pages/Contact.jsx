@@ -45,6 +45,7 @@ export default function Contact() {
               <article className="contact-card">
                 <span className="contact-card-icon"><Phone size={22} /></span>
                 <h2>Call for Appointments</h2>
+                <a href={`tel:${contact.phoneLink}`}>{contact.phone}</a>
                 <a href={`tel:${contactPagePhone}`}>{contactPagePhone}</a>
               </article>
               <article className="contact-card">
@@ -76,7 +77,7 @@ export default function Contact() {
               <div className="appointment-direct">
                 <Phone size={18} />
                 <span>Prefer to call?</span>
-                <a href={`tel:${contactPagePhone}`}>{contactPagePhone}</a>
+                <a href={`tel:${contact.phoneLink}`}>{contact.phone}</a>
               </div>
             </div>
             <AppointmentForm

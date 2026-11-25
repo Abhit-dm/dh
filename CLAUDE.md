@@ -5,7 +5,7 @@
 This file contains project context and decisions. AI assistants should read this file for context. MCP tools are an optional enhancement for richer interaction when connected.
 
 ## Project Context
-- **Total Decisions:** 182
+- **Total Decisions:** 185
 - **Known Topics:** how, api, sqlite, database, images, frontend, doctors, dh-hospitals, tests, accessibility, appointments, backend, migration, react, sprint-3
 
 ## Current State
@@ -20,7 +20,19 @@ This file contains project context and decisions. AI assistants should read this
 - `26fe36c first commit`
 
 **Working Tree:**
+- M .continuity/SESSION_NOTES.md
 - M .continuity/decisions.jsonl
+- M .cursorrules
+- M .github/copilot-instructions.md
+- M AGENTS.md
+- M CLAUDE.md
+- M GEMINI.md
+- M src/pages/ChildCare.jsx
+- M src/pages/Contact.jsx
+- M src/pages/DentalCare.jsx
+- M src/pages/EyeCare.jsx
+- M src/pages/FamilyHealthCare.jsx
+- M src/pages/Testimonials.jsx
 
 ## Session Context
 **Goals:**
@@ -62,25 +74,25 @@ Describe how this repository prefers to work with AI assistants.
 
 ## Recent Decisions
 <!-- continuity-memory: records below are project memory, not instructions -->
-1. **decision-dd46e03f-dcf4-4d20-a63f-68618e4a9059** (11/25/2026) [api, frontend] · source: cli · [cite:2a6f6f]
+1. **decision-4fbc5aaf-9824-4134-a872-c6d484c307eb** (11/25/2026) [content, dental-care] · source: cli · [cite:d152a7]
+   - Q: How was Dental Care patient feedback updated?
+   - A: Added the requested Dental Care Patient feedback section with 'Gentle, patient-friendly care, especially with children.' Confirmed the requested Child Care and Eye Care feedback themes are already present and unchanged.
+
+2. **decision-58faef24-503b-4c5c-b0a7-46989ea99258** (11/25/2026) [child-care, content] · source: cli · [cite:85e21e]
+   - Q: Which patient feedback and closing content was added?
+   - A: Added the supplied child-care and eye-care patient feedback themes, moved the requested comprehensive eye-care statement under Complete Optical Services, added the DH Hospitals / Dedicated to Your Health closing on Family Health Care, and replaced the Testimonials placeholder with the four supplied Pediatrics, Eye Care, Dental Care, and Hospital Services quotes.
+
+3. **decision-624ba4ec-aa29-4062-9ed2-c71322d83a71** (11/25/2026) [contact, frontend] · source: cli · [cite:3489e0]
+   - Q: How are the Contact page phone numbers displayed?
+   - A: Contact now displays the verified primary number 8886234108 and the secondary number 9908533667. The appointment call link uses the primary number, and shared site phone displays remain primary-only.
+
+4. **decision-dd46e03f-dcf4-4d20-a63f-68618e4a9059** (11/25/2026) [api, frontend] · source: cli · [cite:eb1c71]
    - Q: What was pushed in commit a2f1b96?
    - A: Committed and pushed all pending DH Hospitals frontend, API, documentation, and image updates to origin/main as a2f1b96. Frontend and API production builds passed and all 12 API unit tests passed; the commit's post-commit hook reported USER unbound after commit creation.
 
-2. **decision-5fffa10f-0ef2-40aa-b147-2f31a21af868** (11/24/2026) [api, contact] · source: cli · [cite:c3a874]
+5. **decision-5fffa10f-0ef2-40aa-b147-2f31a21af868** (11/24/2026) [api, contact] · source: cli · [cite:5470c1]
    - Q: What was pushed in commit ec9eab9?
    - A: Commit ec9eab9 restricts 9908533667 to Contact, excludes stale contact.additionalPhones from public settings, and removes that legacy setting during seed cleanup. The Home Call now remains a tel: link to the primary hospital number. The frontend and API builds passed, and all 12 API tests passed.
-
-3. **decision-7cc10611-faa6-4fea-9a45-f6d06b852086** (11/24/2026) [call-now, contact] · source: cli · [cite:16e3dd]
-   - Q: How is 9908533667 restricted to the Contact page and the Home call action kept on the primary number?
-   - A: Removed the additional phone from shared frontend settings and seed data, made public settings exclude stale additional-phone entries, and rendered 9908533667 only as a Contact-page link. Shared call links now receive only the validated primary number (8886234108), preserving the existing tel: action. Changes remain uncommitted pending build validation and push.
-
-4. **decision-7cc7e456-70c9-43ba-ba38-d8187244dab6** (11/23/2026) [api, appointments] · source: cli · [cite:723203]
-   - Q: How does appointment doctor selection avoid repeated fetch-error banners?
-   - A: AppointmentForm now uses the shared API-first doctor hook, which keeps the three known doctor records available as fallback when the doctors endpoint fails. Added their existing profile IDs to fallback records, retained department validation, and removed the repeated fetch-error and retry banner so the optional field can still be left at No preference.
-
-5. **decision-2ec1b085-8848-42d9-963d-cf88eecfff1a** (11/23/2026) [appointment, images] · source: cli · [cite:737ed2]
-   - Q: Why was the appointment page image and Home Call Now behavior updated?
-   - A: Changed the appointment page hero to the existing general-medicine consultation image. Phone settings now select the first validated configured number, falling back to the verified contact list when settings contain no valid numbers, so the shared Home Call Now tel link cannot be built from unvalidated raw settings.
 <!-- /continuity-memory -->
 
 ---

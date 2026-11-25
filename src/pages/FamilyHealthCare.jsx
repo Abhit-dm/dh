@@ -114,6 +114,11 @@ export default function FamilyHealthCare() {
         </div>
       </section>
       <CallToAction eyebrow="Family health enquiries" />
+      <section className="section">
+        <div className="container">
+          <SectionHeading eyebrow="DH Hospitals" title="Dedicated to Your Health" />
+        </div>
+      </section>
     </main>
   );
 }

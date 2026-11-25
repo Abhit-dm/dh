@@ -107,6 +107,18 @@ export default function DentalCare() {
             {doctors[0] && <DoctorCard doctor={doctors[0]} />}
           </div>
         </section>
+        <section className="section testimonials-section">
+          <div className="container">
+            <SectionHeading
+              eyebrow="Dental Care"
+              title="Patient feedback"
+            />
+            <article className="testimonial-placeholder">
+              <p>Gentle, patient-friendly care, especially with children.</p>
+              <span>Dental Care</span>
+            </article>
+          </div>
+        </section>
         <CallToAction eyebrow="Dental care appointments" />
       </main>
     </>

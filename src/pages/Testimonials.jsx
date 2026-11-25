@@ -1,22 +1,45 @@
 import { PageIntro, SectionHeading } from '../components/PageIntro.jsx';
 
+const testimonials = [
+  {
+    category: 'Pediatrics',
+    quote: 'Dr. Dinesh explains every condition and treatment clearly. We always feel reassured after every visit.',
+  },
+  {
+    category: 'Eye Care',
+    quote: "Dr. Haasitha's expertise and caring approach made cataract surgery smooth and successful.",
+  },
+  {
+    category: 'Dental Care',
+    quote: 'Dr. Sai Harshitha made my child comfortable throughout treatment.',
+  },
+  {
+    category: 'Hospital Services',
+    quote: 'Clean hospital, caring staff, and a welcoming family-friendly environment.',
+  },
+];
+
 export default function Testimonials() {
   return (
     <main>
       <PageIntro
         eyebrow="Testimonials"
-        title="Google patient reviews"
-        description="Reviews are unavailable until an authorized Google Reviews source is configured."
+        title="Patient feedback"
+        description="Experiences shared across care at DH Hospitals."
       />
       <section className="section testimonials-section">
         <div className="container">
           <SectionHeading
-            eyebrow="Testimonials"
-            title="Google patient reviews"
-            description="Only reviews from an authorized Google source will be shown here."
+            eyebrow="Patient stories"
+            title="What patients and families say."
           />
-          <div className="testimonial-placeholder" role="status">
-            <p>Google Reviews integration is not configured.</p>
+          <div className="testimonial-grid">
+            {testimonials.map(({ category, quote }) => (
+              <article className="testimonial-placeholder" key={category}>
+                <p>“{quote}”</p>
+                <span>{category}</span>
+              </article>
+            ))}
           </div>
         </div>
       </section>

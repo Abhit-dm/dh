@@ -149,6 +149,18 @@ export default function ChildCare() {
             {doctor && <DoctorCard doctor={doctor} />}
           </div>
         </section>
+        <section className="section testimonials-section">
+          <div className="container">
+            <SectionHeading
+              eyebrow="Child Care"
+              title="Patient feedback"
+            />
+            <article className="testimonial-placeholder">
+              <p>Parents appreciate Dr. Dinesh's clear explanations and guidance.</p>
+              <span>Child Care</span>
+            </article>
+          </div>
+        </section>
         <CallToAction eyebrow="Child care appointments" />
       </main>
     </>
